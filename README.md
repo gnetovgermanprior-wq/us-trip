@@ -37,5 +37,5 @@ edit or delete. Approved cards move into the **Approved plan** tab, sorted by ti
 
 ## Notes
 - Link previews use microlink.io's free tier (about 50 previews a day, no key). If a site blocks it,
-  just type the name; a brown placeholder image is used.
+  just type the name; a festive placeholder image is used.
 - Flights and cities are in the `DAYS` list in `index.html` if anything changes.
