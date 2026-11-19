@@ -22,10 +22,11 @@ Near the top of `index.html`:
 ```js
 window.TRIP_CONFIG = {
   firebase: { apiKey: "...", authDomain: "...", projectId: "...", storageBucket: "...", messagingSenderId: "...", appId: "..." },
-  admins: ["your-email@gmail.com"]
+  adminHashes: ["<sha-256 of the lowercase admin email>"]
 };
 ```
-(The Firebase web config is meant to be public; the rules from step 1 are what protect the data.)
+(The Firebase web config is meant to be public; the rules from step 1 are what protect the data.
+Admin emails are stored as hashes so they don't appear in the public code: `printf '%s' you@gmail.com | sha256sum`.)
 
 ## 3. Put it online (GitHub Pages)
 1. The code lives in your GitHub repo. In the repo: **Settings → Pages → Source: Deploy from a branch → `main` / root → Save**.

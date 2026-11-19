@@ -13,12 +13,20 @@
 /* ============================================================
    SETTINGS — the only part you need to edit.
    1. Paste your Firebase web config into `firebase` (see README).
-   2. Put the Google account emails that may approve into `admins`.
+   2. `adminHashes` lists who may approve, as SHA-256 hashes of their Google email
+      (so the emails are not visible in the public code). Ask Claude to add someone.
    Leave `firebase: null` to run in demo mode (saved only in this browser).
    ============================================================ */
 window.TRIP_CONFIG = {
-  firebase: null,
-  admins: []
+  firebase: {
+    apiKey: "AIzaSyAkGX-xelaDXT7czS2Qq3iKjsulAd-ijYA",
+    authDomain: "us-trip-24521.firebaseapp.com",
+    projectId: "us-trip-24521",
+    storageBucket: "us-trip-24521.firebasestorage.app",
+    messagingSenderId: "979181709912",
+    appId: "1:979181709912:web:eccd6d165cf005fc64382d"
+  },
+  adminHashes: ["ae39e2f648867de50ff1b97463b72da4296718003252a1a60a95e35d926990a6"]
 };
 </script>
 
@@ -414,7 +422,8 @@ async function firebaseStore(conf){
   const app = A.initializeApp(conf);
   const db = F.getFirestore(app), auth = U.getAuth(app);
   const col = F.collection(db, 'items');
-  const admins = (CFG.admins||[]).map(e=>String(e).toLowerCase());
+  const hashes = new Set(CFG.adminHashes||[]); let adminUid = null;
+  const sha = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
   return {
     mode:'live',
     subscribe(f){ F.onSnapshot(col, s => f(s.docs.map(d=>({id:d.id, ...d.data(), createdAt:d.data().createdAt?.toMillis?.() ?? Date.now()}))), e => showNotice('Could not load suggestions: ' + e.message)); },
@@ -422,10 +431,10 @@ async function firebaseStore(conf){
     update(id,p){ return F.updateDoc(F.doc(db,'items',id), p); },
     remove(id){ return F.deleteDoc(F.doc(db,'items',id)); },
     like(id,d){ return F.updateDoc(F.doc(db,'items',id), {likes:F.increment(d)}); },
-    onUser(f){ U.onAuthStateChanged(auth, f); },
+    onUser(f){ U.onAuthStateChanged(auth, async u => { adminUid = u && hashes.has(await sha((u.email||'').toLowerCase())) ? u.uid : null; f(u); }); },
     signIn(){ return U.signInWithPopup(auth, new U.GoogleAuthProvider()); },
     signOut(){ return U.signOut(auth); },
-    isAdmin(u){ return !!u && admins.includes((u.email||'').toLowerCase()); }
+    isAdmin(u){ return !!u && u.uid === adminUid; }
   };
 }
 
