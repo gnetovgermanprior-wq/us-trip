@@ -33,7 +33,8 @@ Admin emails are stored as hashes so they don't appear in the public code: `prin
 2. After a minute the site is at `https://<your-github-name>.github.io/<repo-name>/`.
 3. Back in Firebase: **Authentication → Settings → Authorized domains → Add domain** → `<your-github-name>.github.io`.
 
-Share the link. Anyone can add suggestions and like them; you click **Admin sign in** (Google) to approve,
+Share the link. The plan is private: people sign in with Google and only see it once you add their email
+under **Members** (or accept their access request there). Members can suggest, like and comment; you approve,
 edit or delete. Approved cards move into the **Approved plan** tab, sorted by time next to the flights.
 
 ## Notes

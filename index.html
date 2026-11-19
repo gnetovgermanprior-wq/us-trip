@@ -204,7 +204,58 @@ h1 em{font-style:italic;font-weight:500}
 .step .sm{font-size:12.5px;color:var(--muted)}
 .step .pr{font-family:var(--f-mono);font-size:13px;text-align:right;white-space:nowrap}
 .step.fixed .mini{display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--muted);border:1px dashed var(--line);background:transparent}
-.daytotal{font-size:12px;color:var(--muted);margin-top:8px;text-align:right}
+.daytotal{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:right}
+.daytotal b{font-family:var(--f-mono);color:var(--ink);font-weight:500}
+/* gate */
+.gate{max-width:520px;margin:56px auto 80px;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 26px;box-shadow:var(--shadow)}
+.gate h2{font-family:var(--f-display);font-size:32px;font-weight:600;margin:0 0 8px;text-wrap:balance}
+.gate p{color:var(--muted);margin:0 auto 20px;max-width:40ch}
+.gate .who-line{font-size:13px;color:var(--muted);margin-top:14px}
+.gate .fld{text-align:left;margin:0 auto 14px;max-width:320px}
+.gate .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.gbtn{display:inline-flex;align-items:center;gap:10px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:14.5px}
+.gbtn:hover{border-color:var(--brass)}
+.gbtn svg{width:18px;height:18px}
+body.gated .bar .tabs,body.gated #ledger,body.gated #notice{display:none!important}
+/* comments */
+.cbtn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 11px;cursor:pointer;font-size:12px;display:inline-flex;gap:5px;align-items:center;color:var(--muted)}
+.cbtn svg{width:13px;height:13px}
+.cbtn:hover,.like:hover{border-color:var(--brass)}
+.foot .r{display:flex;gap:6px}
+.clist{display:flex;flex-direction:column;gap:12px;max-height:46dvh;overflow-y:auto;padding-right:2px}
+.cm{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+.cm .meta2{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.cm .meta2 b{color:var(--ink);font-size:13px}
+.cm p{margin:2px 0 0;overflow-wrap:anywhere;white-space:pre-wrap}
+.cm .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0;margin-left:auto}
+.cempty{color:var(--muted);font-style:italic;font-family:var(--f-display);font-size:17px}
+/* members */
+.mlist{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mrow{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--line);min-width:0}
+.mrow:first-child{border-top:0}
+.mrow .tx{flex:1;min-width:0}
+.mrow .tx b{display:block;font-size:14px}
+.mrow .tx span{display:block;font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:1px 6px}
+.sec-t{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted);margin:4px 0 -6px}
+.addrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:8px}
+@media (max-width:600px){.addrow{grid-template-columns:1fr 1fr}.addrow .btn{grid-column:1/-1;justify-content:center}}
+.badge-n{background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:11px;padding:0 6px;font-family:var(--f-mono)}
+/* budget + export */
+.budget{display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--muted)}
+.budget b{font-family:var(--f-display);font-size:24px;color:var(--ink);font-weight:600}
+.col .hd .cost{font-family:var(--f-mono);font-size:11px;color:var(--ok);font-weight:500}
+.export{margin-top:22px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.export h4{margin:0;font-family:var(--f-display);font-size:22px;font-weight:600}
+.export p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.export .btns{display:flex;gap:8px;flex-wrap:wrap}
+@media print{
+  .band,.bar,#notice,footer,.export,.cal-tools,.adm,.like,.cbtn,.add,.toast,dialog{display:none!important}
+  body{background:#fff;color:#000}
+  .row{break-inside:avoid}
+  .ledger{margin:0}
+}
 
 /* ---------- dialog ---------- */
 html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
@@ -240,7 +291,7 @@ dialog::backdrop{background:rgba(10,12,24,.62);backdrop-filter:blur(4px);-webkit
 .dlg .hint{font-size:13px;color:var(--muted);margin:-6px 0 0}
 .fld{display:flex;flex-direction:column;gap:5px}
 .fld label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
-.fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+.fldi,.fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
 .fld textarea{min-height:64px;resize:vertical}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .three{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:12px}
@@ -275,11 +326,11 @@ dialog::backdrop{background:rgba(10,12,24,.62);backdrop-filter:blur(4px);-webkit
 .cal{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-left:52px;position:relative}
 .cal-in{display:flex;min-width:max-content}
 .axis{position:sticky;left:0;z-index:4;background:var(--surface);width:52px;flex:none;border-right:1px solid var(--line)}
-.axis .hd{height:70px;border-bottom:1px solid var(--line)}
+.axis .hd{height:84px;border-bottom:1px solid var(--line)}
 .axis .hr{position:absolute;right:8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);transform:translateY(-50%)}
 .col{width:200px;flex:none;border-right:1px solid var(--line);scroll-snap-align:start}
 .col:last-child{border-right:0}
-.col .hd{height:70px;padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:2px;position:sticky;top:0}
+.col .hd{height:84px;padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:2px;position:sticky;top:0}
 .col .hd b{font-family:var(--f-display);font-size:22px;font-weight:600;line-height:1}
 .col .hd small{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .col.today .hd{background:color-mix(in srgb,var(--brass) 16%,transparent)}
@@ -380,12 +431,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div class="tools">
       <button class="btn ghost" id="jump" hidden>Jump to today</button>
       <span class="who" id="who"></span>
+      <button class="btn" id="members-btn" hidden>Members</button>
       <button class="btn" id="admin-btn">Admin sign in</button>
     </div>
   </div>
 </div>
 
 <main class="wrap">
+  <section class="gate" id="gate" hidden></section>
   <div class="notice" id="notice" hidden></div>
   <section class="ledger" id="ledger" aria-live="polite"></section>
 </main>
@@ -412,7 +465,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div class="three">
       <div class="fld"><label for="f-time">From</label><input id="f-time" type="time"></div>
       <div class="fld"><label for="f-end">Until</label><input id="f-end" type="time"></div>
-      <div class="fld"><label for="f-price">Price</label><input id="f-price" maxlength="40" placeholder="$45 per person"></div>
+      <div class="fld"><label for="f-cost">Cost per person ($)</label><input id="f-cost" type="number" inputmode="decimal" min="0" max="100000" step="0.01" placeholder="0 = free"></div>
     </div>
     <div class="fld"><label for="f-note">Note</label><textarea id="f-note" maxlength="400" placeholder="Why it's worth it, tips, booking info…"></textarea></div>
     <div class="fld"><label for="f-name">Your name</label><input id="f-name" required maxlength="40" placeholder="So we know who suggested it"></div>
@@ -420,6 +473,29 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <button type="button" class="btn ghost" id="f-cancel">Cancel</button>
       <button type="submit" class="btn primary" id="f-save">Add suggestion</button>
     </div>
+  </form>
+</dialog>
+
+<dialog id="cdlg" aria-labelledby="c-title">
+  <form class="dlg" id="cform">
+    <div class="dlg-head"><h2 id="c-title">Comments</h2><button type="button" class="x" data-close aria-label="Close">✕</button></div>
+    <p class="hint" id="c-sub"></p>
+    <div class="clist" id="clist"></div>
+    <div class="fld"><label for="c-text">Your comment</label><textarea id="c-text" maxlength="500" required placeholder="Sounds great! / Too expensive? / Let’s book it…"></textarea></div>
+    <div class="row-b"><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn primary" id="c-send">Post comment</button></div>
+  </form>
+</dialog>
+
+<dialog id="mdlg" aria-labelledby="m-title">
+  <form class="dlg" id="mform">
+    <div class="dlg-head"><h2 id="m-title">Who can see the plan</h2><button type="button" class="x" data-close aria-label="Close">✕</button></div>
+    <p class="hint">Only people on this list can open the site after signing in with Google. Add the Google email they use.</p>
+    <div id="mreq"></div>
+    <div class="sec-t">Add someone</div>
+    <div class="addrow"><input id="m-email" type="email" placeholder="friend@gmail.com" aria-label="Google email" class="fldi"><input id="m-name" maxlength="40" placeholder="Name" aria-label="Name" class="fldi"><button type="submit" class="btn primary">Add</button></div>
+    <div class="sec-t">Members</div>
+    <div class="mlist" id="mlist"></div>
+    <div class="row-b"><button type="button" class="btn ghost" data-close>Done</button></div>
   </form>
 </dialog>
 
@@ -483,6 +559,19 @@ function thumb(it, cls='thumb'){
   return img ? `${ph}<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ph;
 }
 function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg; document.body.append(t); setTimeout(()=>t.remove(),2400); }
+const money = n => n == null ? '' : n === 0 ? 'Free' : '$' + (+n).toLocaleString('en-US', n % 1 ? {minimumFractionDigits: 2, maximumFractionDigits: 2} : {maximumFractionDigits: 0});
+function costOf(it){
+  if (typeof it.cost === 'number' && isFinite(it.cost)) return it.cost;
+  const p = String(it.price||'');
+  if (/free/i.test(p)) return 0;
+  const m = p.replace(/,/g,'').match(/\d+(\.\d+)?/); return m ? +m[0] : null;
+}
+const priceLabel = it => { const c = costOf(it); return c == null ? (it.price||'') : c === 0 ? 'Free' : `${money(c)} pp`; };
+const dayCost = list => list.reduce((a,i) => a + (costOf(i)||0), 0);
+const ICON_CM = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2.5h10a1 1 0 0 1 1 1V9a1 1 0 0 1-1 1H6l-3 2.5V10H2a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+const ICON_G = '<svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.6 9.2c0-.6-.1-1.2-.2-1.7H9v3.3h4.8a4.1 4.1 0 0 1-1.8 2.7v2.2h2.9c1.7-1.6 2.7-3.9 2.7-6.5z"/><path fill="#34A853" d="M9 18c2.4 0 4.5-.8 6-2.2l-2.9-2.2c-.8.5-1.8.9-3.1.9-2.4 0-4.4-1.6-5.1-3.7H.9v2.3A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.9 10.8a5.4 5.4 0 0 1 0-3.5V5H.9a9 9 0 0 0 0 8.1l3-2.3z"/><path fill="#EA4335" d="M9 3.6c1.3 0 2.5.5 3.5 1.4l2.6-2.6A9 9 0 0 0 .9 5l3 2.3C4.6 5.2 6.6 3.6 9 3.6z"/></svg>';
+const initials = n => (String(n||'?').trim()[0]||'?').toUpperCase();
+const ago = t => { const s2 = (Date.now()-t)/1000; if (s2<60) return 'just now'; if (s2<3600) return Math.floor(s2/60)+' min ago'; if (s2<86400) return Math.floor(s2/3600)+' h ago'; const d=new Date(t); return `${d.getDate()} ${MON[d.getMonth()]}`; };
 const toMin = t => /^\d{1,2}:\d{2}$/.test(t||'') ? (+t.split(':')[0])*60 + (+t.split(':')[1]) : 9999;
 
 /* ---------- link preview (free, no key) ---------- */
@@ -497,20 +586,20 @@ async function unfurl(url){
 
 /* ---------- data stores ---------- */
 const SAMPLE = [
-  {day:'2026-12-25',cat:'gastro',end:'21:00',title:'Christmas dinner on International Drive',site:'example',price:'~$60 pp',time:'19:00',note:'Book ahead, Christmas Day fills up fast.',author:'Example',status:'suggested',likes:1},
-  {day:'2026-12-26',cat:'activity',end:'16:00',title:'Kennedy Space Center Visitor Complex',site:'kennedyspacecenter.com',url:'https://www.kennedyspacecenter.com/',price:'$75 pp',time:'09:00',note:'About 1 hour drive east. Full day.',author:'Example',status:'approved',likes:2},
+  {day:'2026-12-25',cat:'gastro',end:'21:00',title:'Christmas dinner on International Drive',site:'example',cost:60,price:'$60 pp',time:'19:00',note:'Book ahead, Christmas Day fills up fast.',author:'Example',status:'suggested',likes:1},
+  {day:'2026-12-26',cat:'activity',end:'16:00',title:'Kennedy Space Center Visitor Complex',site:'kennedyspacecenter.com',url:'https://www.kennedyspacecenter.com/',cost:75,price:'$75 pp',comments:1,time:'09:00',note:'About 1 hour drive east. Full day.',author:'Example',status:'approved',likes:2},
   {day:'2026-12-27',title:'Day trip to St. Augustine',site:'example',price:'Gas only',time:'08:30',note:'Oldest city in the US, 2 hours north.',author:'Example',status:'suggested',likes:0},
-  {day:'2026-12-30',cat:'gastro',time:'18:30',end:'20:00',title:'Pizza at a classic slice shop',site:'example',price:'~$15 pp',note:'Quick dinner after Top of the Rock.',author:'Example',status:'approved',likes:2},
-  {day:'2026-12-30',cat:'activity',end:'17:30',title:'Top of the Rock at sunset',site:'rockefellercenter.com',url:'https://www.rockefellercenter.com/',price:'$40 pp',time:'16:00',note:'Sunset is around 16:35 in late December.',author:'Example',status:'approved',likes:3},
+  {day:'2026-12-30',cat:'gastro',time:'18:30',end:'20:00',title:'Pizza at a classic slice shop',site:'example',cost:15,price:'$15 pp',note:'Quick dinner after Top of the Rock.',author:'Example',status:'approved',likes:2},
+  {day:'2026-12-30',cat:'activity',end:'17:30',title:'Top of the Rock at sunset',site:'rockefellercenter.com',url:'https://www.rockefellercenter.com/',cost:40,price:'$40 pp',time:'16:00',note:'Sunset is around 16:35 in late December.',author:'Example',status:'approved',likes:3},
   {day:'2026-12-31',title:'Watch the ball drop near Times Square',site:'example',price:'Free',time:'21:00',note:'Or a quieter rooftop party. Let’s discuss.',author:'Example',status:'suggested',likes:1},
   {day:'2027-01-01',title:'Ice skating in Central Park',site:'example',price:'$35 pp',time:'13:00',note:'',author:'Example',status:'suggested',likes:0},
 ].map((x,i)=>({id:'ex'+i, example:true, createdAt:i, ...x}));
 
 function demoStore(){
-  let items = ls.get('trip-demo-items-v2', null) || SAMPLE;
+  let items = ls.get('trip-demo-items-v3', null) || SAMPLE;
   let user = ls.get('trip-demo-admin', false) ? {email:'demo admin'} : null;
-  const subs = new Set(), userSubs = new Set();
-  const save = () => { ls.set('trip-demo-items-v2', items); subs.forEach(f=>f(items)); };
+  const subs = new Set(), userSubs = new Set(), cSubs = new Map(); let mSub = () => {};
+  const save = () => { ls.set('trip-demo-items-v3', items); subs.forEach(f=>f(items)); };
   return {
     mode:'demo',
     subscribe(f){ subs.add(f); f(items); },
@@ -521,7 +610,20 @@ function demoStore(){
     onUser(f){ userSubs.add(f); f(user); },
     async signIn(){ user={email:'demo admin'}; ls.set('trip-demo-admin',true); userSubs.forEach(f=>f(user)); },
     async signOut(){ user=null; ls.set('trip-demo-admin',false); userSubs.forEach(f=>f(user)); },
-    isAdmin(u){ return !!u; }
+    isAdmin(u){ return !!u; },
+    async checkAccess(u){ return u ? 'admin' : 'member'; },
+    needsLogin: false,
+    // comments
+    listenComments(id, f){ const k='trip-demo-c-'+id; const fire=()=>f(ls.get(k, id==='ex1'?[{id:'c0',text:'Let’s get the bus tour ticket too!',author:'Example',uid:'x',createdAt:Date.now()-3600e3}]:[])); fire(); cSubs.set(id, fire); return () => cSubs.delete(id); },
+    async addComment(id, c){ const k='trip-demo-c-'+id; const list=ls.get(k, id==='ex1'?[{id:'c0',text:'Let’s get the bus tour ticket too!',author:'Example',uid:'x',createdAt:Date.now()-3600e3}]:[]); list.push({...c, id:'c'+Date.now(), uid:'me', createdAt:Date.now()}); ls.set(k,list); items = items.map(x=>x.id===id?{...x,comments:(x.comments||0)+1}:x); save(); cSubs.get(id)?.(); },
+    async removeComment(id, cid){ const k='trip-demo-c-'+id; ls.set(k, ls.get(k,[]).filter(c=>c.id!==cid)); items = items.map(x=>x.id===id?{...x,comments:Math.max(0,(x.comments||0)-1)}:x); save(); cSubs.get(id)?.(); },
+    uid(){ return 'me'; },
+    // members
+    listenMembers(f){ mSub = f; f(ls.get('trip-demo-members', [{email:'friend@example.com', name:'Example friend'}]), ls.get('trip-demo-req', [{email:'cousin@example.com', name:'Example cousin'}])); },
+    async addMember(email, name){ const m = ls.get('trip-demo-members', [{email:'friend@example.com', name:'Example friend'}]).filter(x=>x.email!==email); m.push({email, name}); ls.set('trip-demo-members', m); ls.set('trip-demo-req', ls.get('trip-demo-req', [{email:'cousin@example.com', name:'Example cousin'}]).filter(x=>x.email!==email)); this.listenMembers(mSub); },
+    async removeMember(email){ ls.set('trip-demo-members', ls.get('trip-demo-members', []).filter(x=>x.email!==email)); this.listenMembers(mSub); },
+    async declineRequest(email){ ls.set('trip-demo-req', ls.get('trip-demo-req', []).filter(x=>x.email!==email)); this.listenMembers(mSub); },
+    async requestAccess(){}
   };
 }
 
@@ -535,8 +637,9 @@ async function firebaseStore(conf){
   const sha = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
   return {
     mode:'live',
+    needsLogin: true,
     subscribe(f){ F.onSnapshot(col, s => f(s.docs.map(d=>({id:d.id, ...d.data(), createdAt:d.data().createdAt?.toMillis?.() ?? Date.now()}))), e => showNotice('Could not load suggestions. Check your internet connection and reload the page.', true)); },
-    add(it){ return F.addDoc(col, {...it, likes:0, status:'suggested', createdAt:F.serverTimestamp()}); },
+    add(it){ return F.addDoc(col, {...it, likes:0, comments:0, status:'suggested', createdAt:F.serverTimestamp()}); },
     update(id,p){ return F.updateDoc(F.doc(db,'items',id), p); },
     remove(id){ return F.deleteDoc(F.doc(db,'items',id)); },
     like(id,d){ return F.updateDoc(F.doc(db,'items',id), {likes:F.increment(d)}); },
@@ -547,7 +650,42 @@ async function firebaseStore(conf){
       catch (e) { if (/popup-blocked|operation-not-supported/.test(e.code||'')) return U.signInWithRedirect(auth, prov); throw e; }
     },
     signOut(){ return U.signOut(auth); },
-    isAdmin(u){ return !!u && u.uid === adminUid; }
+    isAdmin(u){ return !!u && u.uid === adminUid; },
+    uid(){ return auth.currentUser?.uid; },
+    async checkAccess(u){
+      if (!u) return 'signin';
+      if (u.uid === adminUid) return 'admin';
+      try { const d = await F.getDoc(F.doc(db, 'members', (u.email||'').toLowerCase())); return d.exists() ? 'member' : 'none'; }
+      catch { return 'none'; }
+    },
+    async requestAccess(u, name){
+      const email = (u.email||'').toLowerCase();
+      await F.setDoc(F.doc(db, 'requests', email), {email, name: String(name||'').slice(0,60), at: F.serverTimestamp()});
+    },
+    async hasRequested(u){ try { return (await F.getDoc(F.doc(db, 'requests', (u.email||'').toLowerCase()))).exists(); } catch { return false; } },
+    listenComments(id, f){
+      const q = F.query(F.collection(db, 'items', id, 'comments'), F.orderBy('createdAt'));
+      return F.onSnapshot(q, s2 => f(s2.docs.map(d => ({id:d.id, ...d.data(), createdAt: d.data().createdAt?.toMillis?.() ?? Date.now()}))), () => f(null));
+    },
+    async addComment(id, c){
+      await F.addDoc(F.collection(db, 'items', id, 'comments'), {...c, uid: auth.currentUser.uid, createdAt: F.serverTimestamp()});
+      await F.updateDoc(F.doc(db, 'items', id), {comments: F.increment(1)}).catch(()=>{});
+    },
+    async removeComment(id, cid){
+      await F.deleteDoc(F.doc(db, 'items', id, 'comments', cid));
+      await F.updateDoc(F.doc(db, 'items', id), {comments: F.increment(-1)}).catch(()=>{});
+    },
+    listenMembers(f){
+      let m = [], r = [];
+      F.onSnapshot(F.collection(db, 'members'), s2 => { m = s2.docs.map(d=>d.data()); f(m, r); });
+      F.onSnapshot(F.collection(db, 'requests'), s2 => { r = s2.docs.map(d=>d.data()); f(m, r); });
+    },
+    async addMember(email, name){
+      await F.setDoc(F.doc(db, 'members', email), {email, name: String(name||'').slice(0,60), addedAt: F.serverTimestamp()});
+      await F.deleteDoc(F.doc(db, 'requests', email)).catch(()=>{});
+    },
+    removeMember(email){ return F.deleteDoc(F.doc(db, 'members', email)); },
+    declineRequest(email){ return F.deleteDoc(F.doc(db, 'requests', email)); }
   };
 }
 
@@ -598,10 +736,10 @@ function card(it){
     <div class="body">
       ${site?`<div class="site">${esc(site)}</div>`:''}
       <h3>${title}</h3>
-      ${(it.time||it.price)?`<div class="meta">${it.time?`<span class="chip">${esc(range(it))}</span>`:''}${it.price?`<span class="chip">${esc(it.price)}</span>`:''}</div>`:''}
+      ${(it.time||priceLabel(it))?`<div class="meta">${it.time?`<span class="chip">${esc(range(it))}</span>`:''}${priceLabel(it)?`<span class="chip">${esc(priceLabel(it))}</span>`:''}</div>`:''}
       ${it.note?`<p class="note">${esc(it.note)}</p>`:''}
       <div class="foot"><span>by ${esc(it.author||'someone')}</span>
-        <button class="like" data-act="like" data-id="${esc(it.id)}" aria-pressed="${liked.has(it.id)}" aria-label="Like">♥ ${it.likes||0}</button></div>
+        <span class="r"><button class="cbtn" data-act="comments" data-id="${esc(it.id)}" aria-label="Comments">${ICON_CM} ${it.comments||0}</button><button class="like" data-act="like" data-id="${esc(it.id)}" aria-pressed="${liked.has(it.id)}" aria-label="Like">♥ ${it.likes||0}</button></span></div>
       ${admin?`<div class="adm">${admin}</div>`:''}
     </div></article>`;
 }
@@ -612,10 +750,11 @@ function planCell(d, list){
   const rows = all.map(it => it.fixed
     ? `<div class="step fixed"><span class="tm">${esc(it.time)}</span><div class="mini">FLIGHT</div><div><h4>${esc(it.title)}</h4><div class="sm">${esc(it.sub)}</div></div><span class="pr"></span></div>`
     : (()=>{ const url=safeUrl(it.url); const t=url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(it.title)}</a>`:esc(it.title);
-      return `<div class="step"><span class="tm${it.time?'':' none'}">${esc(it.time||'any time')}${it.end?`<br><small style="color:var(--muted)">–${esc(it.end)}</small>`:''}</span><div class="mini">${thumb(it)}</div><div><span class="catpill"><span class="ico ${catOf(it)}" style="width:16px;height:16px">${CATS[catOf(it)].icon}</span>${catOf(it)==='gastro'?'Gastro':'Activity'}</span><h4>${t}</h4>${it.note?`<div class="sm">${esc(it.note)}</div>`:''}</div><span class="pr">${esc(it.price||'')}</span></div>`; })()
+      return `<div class="step"><span class="tm${it.time?'':' none'}">${esc(it.time||'any time')}${it.end?`<br><small style="color:var(--muted)">–${esc(it.end)}</small>`:''}</span><div class="mini">${thumb(it)}</div><div><span class="catpill"><span class="ico ${catOf(it)}" style="width:16px;height:16px">${CATS[catOf(it)].icon}</span>${catOf(it)==='gastro'?'Gastro':'Activity'}</span><h4>${t}</h4>${it.note?`<div class="sm">${esc(it.note)}</div>`:''}</div><span class="pr">${esc(priceLabel(it))}</span></div>`; })()
   ).join('');
   const extra = list.length ? '' : `<div class="empty" style="font-size:16px;padding-top:10px">No activities approved for this day yet.</div>`;
-  return `<div class="plan">${rows}</div>${extra}`;
+  const tot = dayCost(list);
+  return `<div class="plan">${rows}</div>${extra}${list.length?`<div class="daytotal">Day total <b>${money(tot)}</b> per person</div>`:''}`;
 }
 /* ---------- calendar ---------- */
 let showGhosts = ls.get('trip-ghosts', true);
@@ -669,18 +808,21 @@ function renderCalendar(){
     const any = appr.filter(i=>toMin(i.time)>=9999);
     const nowLine = d.date === today && nowM >= H0 ? `<div class="now" style="top:${ypx(nowM)}px"></div>` : '';
     return `<div class="col${d.date===today?' today':''}" id="c-${d.date}">
-      <div class="hd"><b>${WD[dt.getDay()]} ${dt.getDate()}</b><small>${esc(d.hol || d.city.name)}</small></div>
+      <div class="hd"><b>${WD[dt.getDay()]} ${dt.getDate()}</b><small>${esc(d.hol || d.city.name)}</small>${appr.length?`<span class="cost">${esc(money(dayCost(appr)))} pp</span>`:''}</div>
       <div class="body" style="height:${ypx(H1)}px;--hh:${HH}px">${gaps}${blocks}${nowLine}</div>
       <div class="anytime"><span class="k">Any time</span>${any.length ? any.map(i=>{ const u=safeUrl(i.url); const inner=`<span class="ico ${catOf(i)}" style="width:16px;height:16px">${CATS[catOf(i)].icon}</span>${esc(i.title)}`; return u?`<a href="${esc(u)}" target="_blank" rel="noopener">${inner}</a>`:`<span class="i">${inner}</span>`; }).join('') : '<span style="color:var(--muted)">–</span>'}</div>
     </div>`;
   }).join('');
   $('#ledger').innerHTML = `
     <div class="cal-tools">
+      <div class="budget">Trip budget so far <b>${money(dayCost(items.filter(i=>i.status==='approved')))}</b> per person</div>
       <div class="legend"><span><i class="sw activity"></i>Activity</span><span><i class="sw gastro"></i>Gastro</span><span><i class="sw flight"></i>Flight</span>${admin?'<span><i class="sw ghost"></i>Pending suggestion</span>':''}</div>
       <div class="navbtns">${admin?`<label class="toggle"><input type="checkbox" id="ghosts" ${showGhosts?'checked':''}>Show pending</label>`:''}<button class="btn" data-act="calnav" data-dir="-1" aria-label="Earlier days">←</button><button class="btn" data-act="calnav" data-dir="1" aria-label="Later days">→</button></div>
     </div>
     <div class="cal" id="cal"><div class="cal-in"><div class="axis"><div class="hd"></div><div style="position:relative;height:${ypx(H1)}px">${hours.join('')}</div></div>${cols}</div></div>
-    <p class="cal-note">Approved events only${admin?' (plus pending suggestions while “Show pending” is on, only visible to admins)':''}. Events without an end time are shown as ${CATS.activity.dur/60} h for activities and 1 h 30 m for gastro. Green labels show free time between plans.</p>`;
+    <div class="export" id="export"><div><h4>Take the plan with you</h4><p>Approved events and flights, with times, costs and links.</p></div>
+      <div class="btns"><button class="btn primary" data-act="ics">Add to my calendar (.ics)</button><button class="btn" data-act="csv">Spreadsheet (.csv)</button><button class="btn" data-act="print">Print or save as PDF</button></div></div>
+    <p class="cal-note">Approved events only${admin?' (plus pending suggestions while “Show pending” is on, only visible to admins)':''}. Events without an end time are shown as ${CATS.activity.dur/60} h for activities and 1 h 30 m for gastro. Green labels show free time between plans. Costs are per person in US dollars.</p>`;
   const g = $('#ghosts'); if (g) g.onchange = () => { showGhosts = g.checked; ls.set('trip-ghosts', showGhosts); render(); };
   const cal = $('#cal'), start = document.getElementById('c-'+today) || null;
   if (start) cal.scrollLeft = start.offsetLeft - 52;
@@ -710,8 +852,11 @@ function render(){
 }
 function renderUser(){
   const name = ls.get('trip-name','');
-  $('#who').textContent = isAdmin() ? `Admin${user?.email && store.mode==='live' ? ' · '+user.email : ''}` : (name ? `Hi, ${name}` : '');
-  $('#admin-btn').textContent = user ? 'Sign out' : 'Admin sign in';
+  $('#who').textContent = isAdmin() ? 'Admin' : (user && name ? `Hi, ${name}` : (name && !store?.needsLogin ? `Hi, ${name}` : ''));
+  $('#admin-btn').textContent = user ? 'Sign out' : (store?.needsLogin ? 'Sign in' : 'Admin sign in');
+  $('#admin-btn').hidden = !!store?.needsLogin && !user;
+  $('#members-btn').hidden = !isAdmin();
+  if (isAdmin() && store?.mode === 'demo' && !membersOn) { membersOn = true; store.listenMembers((m, r) => { members = m; requests = r; drawMembers(); }); }
 }
 
 /* ---------- modals: lock the page behind, close on Esc / outside tap ---------- */
@@ -742,7 +887,7 @@ for (const d of document.querySelectorAll('dialog')) {
 /* ---------- suggestion dialog ---------- */
 const dlg = $('#dlg');
 let snapshot = '';
-const formState = () => ['#f-url','#f-title','#f-time','#f-end','#f-price','#f-note'].map(s=>$(s).value).join('\u0001');
+const formState = () => ['#f-url','#f-title','#f-time','#f-end','#f-cost','#f-note'].map(s=>$(s).value).join('\u0001');
 const isDirty = () => formState() !== snapshot;
 $('#f-day').innerHTML = DAYS.map(d=>{ const dt=parseDay(d.date); return `<option value="${d.date}">${WD[dt.getDay()]} ${dt.getDate()} ${MON[dt.getMonth()]} · ${esc(d.city.name)}</option>`; }).join('');
 let fetched = {};
@@ -757,7 +902,7 @@ function openDialog(day, it, cat){
   $('#f-time').value = it?.time || '';
   $('#f-end').value = it?.end || '';
   $('#f-cat-' + (it ? catOf(it) : (cat || 'activity'))).checked = true; syncCat();
-  $('#f-price').value = it?.price || '';
+  const c0 = it ? costOf(it) : null; $('#f-cost').value = c0 == null ? '' : c0;
   $('#f-note').value = it?.note || '';
   $('#f-name').value = it?.author || ls.get('trip-name','');
   $('#f-status').textContent = ''; $('#f-status').className = 'status';
@@ -819,10 +964,12 @@ $('#form').addEventListener('submit', async e => {
   const data = {
     day: $('#f-day').value, url, title: $('#f-title').value.trim().slice(0,140),
     time: $('#f-time').value, end: ($('#f-end').value && toMin($('#f-end').value) > toMin($('#f-time').value)) ? $('#f-end').value : '',
-    cat: document.querySelector('input[name="f-cat"]:checked').value === 'gastro' ? 'gastro' : 'activity', price: $('#f-price').value.trim().slice(0,40),
+    cat: document.querySelector('input[name="f-cat"]:checked').value === 'gastro' ? 'gastro' : 'activity', cost: $('#f-cost').value === '' ? null : Math.max(0, Math.min(100000, Math.round(+$('#f-cost').value*100)/100)),
     note: $('#f-note').value.trim().slice(0,400), author: name.slice(0,40),
     image: safeUrl(fetched.image||'') , site: (fetched.site || host(url) || '').slice(0,80)
   };
+  data.price = data.cost == null ? '' : data.cost === 0 ? 'Free' : `$${data.cost} pp`;
+  if (data.cost == null) delete data.cost;
   if (!data.title) return;
   const sb = $('#f-save'), label = sb.textContent;
   sb.disabled = true; sb.textContent = 'Saving…';
@@ -851,6 +998,10 @@ $('#ledger').addEventListener('click', async e => {
         b.setAttribute('aria-pressed', on); b.textContent = '♥ ' + Math.max(0, (it?.likes||0) + (on?1:-1));
         try { await store.like(id, on?1:-1); } catch (e) { on?liked.delete(id):liked.add(id); ls.set('trip-liked',[...liked]); render(); throw e; }
         break; }
+      case 'comments': openComments(it); break;
+      case 'ics': download('orlando-new-york.ics', 'text/calendar;charset=utf-8', buildICS()); break;
+      case 'csv': download('orlando-new-york.csv', 'text/csv;charset=utf-8', '\ufeff' + buildCSV()); break;
+      case 'print': { const v = view; view = 'plan'; render(); setTimeout(() => { print(); view = v; render(); }, 80); break; }
       case 'del': {
         const c = $('#confirm'); $('#confirm-text').textContent = `“${it?.title}” will be removed for everyone.`;
         c.returnValue=''; openModal(c);
@@ -863,6 +1014,149 @@ $('#ledger').addEventListener('click', async e => {
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => { view = t.dataset.view; history.replaceState(null,'','#'+view); render(); });
 addEventListener('hashchange', () => { const h=location.hash.slice(1); if (VIEWS.includes(h)) { view=h; render(); } });
 $('#jump').onclick = () => document.getElementById('d-'+localKey())?.scrollIntoView({behavior:'smooth', block:'start'});
+/* ---------- comments ---------- */
+const cdlg = $('#cdlg'); let cItem = null, cUnsub = null, cCache = [];
+const avColor = n => ['#9b2335','#2c5a43','#2b3a67','#b8902f','#6b3fa0'][hue(n)%5];
+function openComments(it){
+  if (!it) return;
+  cItem = it; $('#c-title').textContent = it.title; $('#c-sub').textContent = `${catOf(it)==='gastro'?'Gastro':'Activity'} · ${(()=>{const dt=parseDay(it.day);return `${WD[dt.getDay()]} ${dt.getDate()} ${MON[dt.getMonth()]}`})()}`;
+  $('#c-text').value = ''; $('#clist').innerHTML = '<div class="cempty">Loading…</div>';
+  cUnsub?.(); cUnsub = store.listenComments(it.id, list => { cCache = list || []; drawComments(list); });
+  openModal(cdlg);
+}
+function drawComments(list){
+  const box = $('#clist');
+  if (list === null) { box.innerHTML = '<div class="cempty">Comments could not be loaded.</div>'; return; }
+  if (!list.length) { box.innerHTML = '<div class="cempty">No comments yet. Start the conversation.</div>'; return; }
+  const me = store.uid?.();
+  box.innerHTML = list.map(c => `<div class="cm"><span class="av" style="background:${avColor(c.author)}">${esc(initials(c.author))}</span><div><div class="meta2"><b>${esc(c.author||'Someone')}</b><span>${esc(ago(c.createdAt))}</span>${(c.uid===me||isAdmin())?`<button type="button" class="del" data-cid="${esc(c.id)}">Delete</button>`:''}</div><p>${esc(c.text)}</p></div></div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+cdlg.addEventListener('close', () => { cUnsub?.(); cUnsub = null; });
+$('#clist').addEventListener('click', async e => { const b = e.target.closest('[data-cid]'); if (!b) return; try { await store.removeComment(cItem.id, b.dataset.cid); } catch { toast('Couldn’t delete that comment.'); } });
+$('#cform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = $('#c-text').value.trim().slice(0,500); if (!text) return;
+  const author = (ls.get('trip-name','') || user?.displayName?.split(' ')[0] || 'Someone').slice(0,40);
+  const b = $('#c-send'); b.disabled = true; b.textContent = 'Posting…';
+  try { await store.addComment(cItem.id, {text, author}); $('#c-text').value = ''; }
+  catch { toast('Couldn’t post. Check your connection and try again.'); }
+  finally { b.disabled = false; b.textContent = 'Post comment'; }
+});
+$('#c-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) $('#cform').requestSubmit(); });
+document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => b.closest('dialog').close());
+
+/* ---------- members (admin) ---------- */
+const mdlg = $('#mdlg'); let members = [], requests = [], membersOn = false;
+function drawMembers(){
+  const reqs = requests.filter(r => !members.some(m => m.email === r.email));
+  $('#mreq').innerHTML = reqs.length ? `<div class="sec-t" style="margin-bottom:8px">Asking for access</div><div class="mlist">${reqs.map(r=>`<div class="mrow"><span class="av" style="background:${avColor(r.name||r.email)}">${esc(initials(r.name||r.email))}</span><div class="tx"><b>${esc(r.name||'No name')}</b><span>${esc(r.email)}</span></div><button type="button" class="btn sm ok" data-mact="accept" data-email="${esc(r.email)}" data-name="${esc(r.name||'')}">Let in</button><button type="button" class="btn sm ghost" data-mact="decline" data-email="${esc(r.email)}" aria-label="Decline">✕</button></div>`).join('')}</div>` : '';
+  $('#mlist').innerHTML = `<div class="mrow"><span class="av" style="background:var(--accent)">★</span><div class="tx"><b>You</b><span>Admin</span></div><span class="tag">Admin</span></div>` +
+    members.map(m=>`<div class="mrow"><span class="av" style="background:${avColor(m.name||m.email)}">${esc(initials(m.name||m.email))}</span><div class="tx"><b>${esc(m.name||'No name')}</b><span>${esc(m.email)}</span></div><button type="button" class="btn sm ghost" data-mact="remove" data-email="${esc(m.email)}">Remove</button></div>`).join('');
+  const n = reqs.length; $('#members-btn').innerHTML = `Members${n?` <span class="badge-n">${n}</span>`:''}`;
+}
+$('#members-btn').onclick = () => openModal(mdlg);
+mdlg.addEventListener('click', async e => {
+  const b = e.target.closest('[data-mact]'); if (!b) return;
+  try {
+    if (b.dataset.mact === 'accept') { await store.addMember(b.dataset.email, b.dataset.name); toast('Added. They can open the plan now'); }
+    if (b.dataset.mact === 'decline') await store.declineRequest(b.dataset.email);
+    if (b.dataset.mact === 'remove') { await store.removeMember(b.dataset.email); toast('Removed'); }
+  } catch { toast('That didn’t work. Please try again.'); }
+});
+$('#mform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('#m-email').value.trim().toLowerCase(), name = $('#m-name').value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast('Enter a full email address, like name@gmail.com'); return; }
+  try { await store.addMember(email, name); $('#m-email').value = ''; $('#m-name').value = ''; toast('Added'); } catch { toast('Couldn’t add. Please try again.'); }
+});
+
+/* ---------- export ---------- */
+function download(name, type, text){
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type})); a.download = name;
+  document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast('Downloaded ' + name);
+}
+function planEvents(){
+  const out = [];
+  for (const d of DAYS) {
+    for (const f of d.fixed||[]) if (f.cal) out.push({day:d.date, s:f.cal[0], e:f.cal[1]==='23:59'?'23:59':f.cal[1], title:'✈ '+f.cal[2]+' ('+f.codes+')', cat:'Flight', city:d.city.name, cost:null, url:'', note:'', author:'', uid:'flight-'+d.date});
+    for (const i of items.filter(x=>x.day===d.date && x.status==='approved'))
+      out.push({day:d.date, s:i.time||'', e:i.time?fromMin(endOf(i)):'', title:i.title, cat:catOf(i)==='gastro'?'Gastro':'Activity', city:d.city.name, cost:costOf(i), url:safeUrl(i.url), note:i.note||'', author:i.author||'', uid:i.id});
+  }
+  return out.sort((a,b) => a.day.localeCompare(b.day) || toMin(a.s)-toMin(b.s));
+}
+function buildCSV(){
+  const q = v => { const t = String(v ?? ''); return /[",\n;]/.test(t) ? '"' + t.replace(/"/g,'""') + '"' : t; };
+  const rows = [['Date','Weekday','City','From','Until','Category','Title','Cost per person (USD)','Link','Note','Suggested by']];
+  for (const e of planEvents()) { const dt = parseDay(e.day); rows.push([e.day, WD[dt.getDay()], e.city, e.s, e.e, e.cat, e.title, e.cost ?? '', e.url, e.note, e.author]); }
+  rows.push([]); rows.push(['','','','','','','Total per person', dayCost(items.filter(i=>i.status==='approved'))]);
+  return rows.map(r => r.map(q).join(',')).join('\r\n');
+}
+function buildICS(){
+  const escI = t => String(t||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');
+  const fold = l => { const out = []; while (l.length > 74) { out.push(l.slice(0,74)); l = ' ' + l.slice(74); } out.push(l); return out.join('\r\n'); };
+  const stamp = new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const dt = (day, t) => day.replace(/-/g,'') + 'T' + t.replace(':','') + '00';
+  const next = day => { const d = parseDay(day); d.setDate(d.getDate()+1); return localKey(d).replace(/-/g,''); };
+  const L = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Orlando and New York trip//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Orlando & New York','X-WR-TIMEZONE:America/New_York',
+    'BEGIN:VTIMEZONE','TZID:America/New_York','BEGIN:DAYLIGHT','TZOFFSETFROM:-0500','TZOFFSETTO:-0400','TZNAME:EDT','DTSTART:19700308T020000','RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU','END:DAYLIGHT','BEGIN:STANDARD','TZOFFSETFROM:-0400','TZOFFSETTO:-0500','TZNAME:EST','DTSTART:19701101T020000','RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU','END:STANDARD','END:VTIMEZONE'];
+  for (const e of planEvents()) {
+    L.push('BEGIN:VEVENT', 'UID:' + e.uid + '@us-trip', 'DTSTAMP:' + stamp);
+    if (e.s) { L.push('DTSTART;TZID=America/New_York:' + dt(e.day, e.s), 'DTEND;TZID=America/New_York:' + dt(e.day, e.e || e.s)); }
+    else L.push('DTSTART;VALUE=DATE:' + e.day.replace(/-/g,''), 'DTEND;VALUE=DATE:' + next(e.day));
+    L.push('SUMMARY:' + escI(e.title));
+    const desc = [e.cat, e.cost != null ? 'Cost: ' + money(e.cost) + ' per person' : '', e.note, e.url].filter(Boolean).join('\n');
+    if (desc) L.push('DESCRIPTION:' + escI(desc));
+    if (e.url) L.push('URL:' + e.url);
+    L.push('LOCATION:' + escI(e.city), 'END:VEVENT');
+  }
+  L.push('END:VCALENDAR');
+  return L.map(fold).join('\r\n') + '\r\n';
+}
+
+/* ---------- private access gate ---------- */
+let access = 'loading', started = false;
+function gate(state){
+  const g = $('#gate'); access = state; renderCount();
+  document.body.classList.toggle('gated', state !== 'ok');
+  g.hidden = state === 'ok';
+  const host2 = 'German';
+  if (state === 'loading') g.innerHTML = `<h2>Opening the plan…</h2><p>One moment.</p>`;
+  if (state === 'signin') g.innerHTML = `<h2>This plan is private</h2><p>It’s just for our travel group. Sign in with your Google account to see the days, ideas and calendar.</p><div class="btns"><button class="gbtn" id="g-in">${ICON_G}Sign in with Google</button></div>`;
+  if (state === 'none' || state === 'requested') {
+    const nm = ls.get('trip-name','') || user?.displayName || '';
+    g.innerHTML = state === 'requested'
+      ? `<h2>Request sent</h2><p>${host2} will let you in soon. Come back to this page later, it opens by itself once you’re on the list.</p><div class="btns"><button class="btn ghost" id="g-out">Use another account</button></div><div class="who-line">Signed in as ${esc(user?.email)}</div>`
+      : `<h2>You’re not on the list yet</h2><p>Only invited people can see this trip plan. Ask ${host2} to add you, or send a request here.</p><div class="fld"><label for="g-name">Your name</label><input id="g-name" maxlength="40" value="${esc(nm)}"></div><div class="btns"><button class="btn primary" id="g-req">Request access</button><button class="btn ghost" id="g-out">Use another account</button></div><div class="who-line">Signed in as ${esc(user?.email)}</div>`;
+  }
+  $('#g-in')?.addEventListener('click', () => store.signIn().catch(e => { if (!/popup-closed|cancelled-popup/.test(e.code||'')) toast('Sign in didn’t work. Please try again.'); }));
+  $('#g-out')?.addEventListener('click', () => store.signOut());
+  $('#g-req')?.addEventListener('click', async () => {
+    const name = $('#g-name').value.trim(); if (name) ls.set('trip-name', name);
+    try { await store.requestAccess(user, name || user?.displayName || ''); gate('requested'); } catch { toast('Couldn’t send the request. Please try again.'); }
+  });
+}
+let accessTimer = null;
+async function onAuth(u){
+  user = u; renderUser();
+  if (!store.needsLogin) { if (!started) { started = true; gate('ok'); store.subscribe(list => { items = list; render(); }); } render(); return; }
+  clearInterval(accessTimer);
+  const a = await store.checkAccess(u);
+  if (a === 'admin' || a === 'member') {
+    if (u && !ls.get('trip-name','') && u.displayName) ls.set('trip-name', u.displayName.split(' ')[0]);
+    gate('ok'); renderUser();
+    if (!started) { started = true; store.subscribe(list => { items = list; render(); }); }
+    if (a === 'admin' && !membersOn) { membersOn = true; store.listenMembers((m, r) => { members = m; requests = r; drawMembers(); }); }
+    render();
+  } else if (a === 'signin') gate('signin');
+  else {
+    gate(await store.hasRequested(u) ? 'requested' : 'none');
+    // re-check every 30 s, so the page opens by itself once admitted
+    accessTimer = setInterval(async () => { if (await store.checkAccess(u) !== 'none') { clearInterval(accessTimer); location.reload(); } }, 30000);
+  }
+}
+
 $('#admin-btn').onclick = async () => {
   try { user ? await store.signOut() : await store.signIn(); }
   catch (e) { if (!/popup-closed|cancelled-popup/.test(e.code||'')) toast('Sign in didn’t work. Please try again.'); }
@@ -935,10 +1229,10 @@ const NY_SWITCH = Date.parse('2026-12-29T09:00:00-05:00');
   if (store.mode === 'demo') {
     $('#mode').textContent = 'Demo mode · changes stay in this browser';
     if ($('#notice').hidden) showNotice('<b>Preview.</b> Example cards are shown and anything you add is saved only in this browser. Try “Admin sign in” to see the approve buttons.');
-  } else $('#mode').textContent = 'Shared plan · updates live for everyone';
-  store.onUser(u => { user = u; renderUser(); render(); });
-  store.subscribe(list => { items = list; render(); });
-  renderUser(); render();
+  } else $('#mode').textContent = 'Private shared plan · updates live';
+  if (store.needsLogin) gate('loading');
+  store.onUser(onAuth);
+  renderUser();
 })();
 </script>
 </body>

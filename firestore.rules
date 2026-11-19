@@ -1,28 +1,62 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Put the same Google emails here as in `admins` in index.html
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.email in ['YOUR-EMAIL@gmail.com'];
-    }
-    function okText(d) {
+
+    // ---- Who is who --------------------------------------------------
+    // Put the admin's Google email here (lowercase). Several: ['a@gmail.com', 'b@gmail.com']
+    function adminEmails() { return ['YOUR-EMAIL@gmail.com']; }
+
+    function signedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    function myEmail()  { return request.auth.token.email.lower(); }
+    function isAdmin()  { return signedIn() && myEmail() in adminEmails(); }
+    // Members are managed from the site ("Members" button): one doc per email in /members
+    function isMember() { return isAdmin() || (signedIn() && exists(/databases/$(database)/documents/members/$(myEmail()))); }
+
+    function okItem(d) {
       return d.title is string && d.title.size() > 0 && d.title.size() <= 140
         && d.day is string && d.author is string && d.author.size() <= 40
         && d.note is string && d.note.size() <= 400
         && d.price is string && d.price.size() <= 40;
     }
+    function onlyChanged(k) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly([k]); }
+    function stepOf(k) { return request.resource.data.get(k, 0) - resource.data.get(k, 0); }
+
+    // ---- Guest list ------------------------------------------------------
+    match /members/{email} {
+      allow get: if signedIn() && (email == myEmail() || isAdmin());
+      allow list, create, update, delete: if isAdmin();
+    }
+    // People asking to be let in
+    match /requests/{email} {
+      allow get: if signedIn() && (email == myEmail() || isAdmin());
+      allow create, update: if signedIn() && email == myEmail()
+        && request.resource.data.email == myEmail()
+        && request.resource.data.name is string && request.resource.data.name.size() <= 60;
+      allow list, delete: if isAdmin();
+    }
+
+    // ---- Trip suggestions -------------------------------------------------
     match /items/{id} {
-      allow read: if true;
-      // Anyone can suggest; new cards always start as "suggested" with 0 likes
-      allow create: if okText(request.resource.data)
+      allow read: if isMember();
+      allow create: if isMember() && okItem(request.resource.data)
         && request.resource.data.status == 'suggested'
-        && request.resource.data.likes == 0;
-      // Anyone can like/unlike (likes only, by 1); admins can change anything
+        && request.resource.data.likes == 0
+        && request.resource.data.get('comments', 0) == 0;
+      // members may only like/unlike or bump the comment counter by 1; admins can change anything
       allow update: if isAdmin()
-        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
-            && request.resource.data.likes - resource.data.likes in [-1, 1]);
+        || (isMember() && onlyChanged('likes') && stepOf('likes') in [-1, 1])
+        || (isMember() && onlyChanged('comments') && stepOf('comments') in [-1, 1]);
       allow delete: if isAdmin();
+
+      match /comments/{cid} {
+        allow read: if isMember();
+        allow create: if isMember()
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 500
+          && request.resource.data.author is string && request.resource.data.author.size() <= 40;
+        allow delete: if isAdmin() || (isMember() && resource.data.uid == request.auth.uid);
+      }
     }
   }
 }
