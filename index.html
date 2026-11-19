@@ -219,6 +219,44 @@ h1 em{font-style:italic;font-weight:500}
 .step .sm{font-size:12.5px;color:var(--muted)}
 .step .pr{font-family:var(--f-mono);font-size:13px;text-align:right;white-space:nowrap}
 .step.fixed .mini{display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--muted);border:1px dashed var(--line);background:transparent}
+/* photos */
+.ph-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 14px}
+.ph-tools .chips label{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 4px}
+.ph-tools .chips label.all{padding:6px 12px}
+.ph-tools select{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-weight:600;font-size:13px}
+.prof{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.prof .av{width:52px;height:52px;font-size:22px}
+.prof b{font-family:var(--f-display);font-size:26px;font-weight:600;display:block;line-height:1.1}
+.prof span{color:var(--muted);font-size:13px}
+.pday{margin:0 0 26px}
+.pday h4{margin:0 0 10px;font-family:var(--f-display);font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px}
+.pday h4 small{font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.pt{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--sunk);border:0;padding:0;cursor:zoom-in;max-width:100%}
+.pt img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
+.pt:hover img{transform:scale(1.04)}
+.pt .by{position:absolute;left:6px;bottom:6px;display:flex;align-items:center;gap:5px;background:rgba(10,12,24,.55);color:#fff;border-radius:999px;padding:2px 8px 2px 2px;font-size:11px;font-weight:600;backdrop-filter:blur(4px)}
+.pt .by .av{width:18px;height:18px;font-size:9px}
+.light{width:min(980px,calc(100vw - 32px));background:#0d0f1a;border-color:#222;color:#f4ecdf}
+.light .dlg{padding:0;gap:0}
+.light .stage{position:relative;background:#000;display:flex;align-items:center;justify-content:center;min-height:240px;max-height:72dvh}
+.light .stage img{max-width:100%;max-height:72dvh;display:block;object-fit:contain}
+.light .nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(4px)}
+.light .nav:hover{background:rgba(255,255,255,.3)}
+.light .prev{left:10px} .light .next{right:10px}
+.light .x{position:absolute;top:10px;right:10px;z-index:2;background:rgba(255,255,255,.15);color:#fff}
+.light .cap{padding:14px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.light .cap .tx2{flex:1;min-width:0}
+.light .cap b{display:block}
+.light .cap span{font-size:12.5px;color:#a9a3b8}
+.light .cap p{margin:4px 0 0;overflow-wrap:anywhere}
+.upl{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.upl .u{display:flex;flex-direction:column;gap:6px}
+.upl img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block}
+.upl input{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:6px 8px;font-size:13px;min-width:0;width:100%}
+.drop{border:1.5px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--muted);cursor:pointer;display:block;font-weight:600;text-transform:none;letter-spacing:0;font-size:14px}
+.drop:hover{border-color:var(--accent);color:var(--accent)}
+.drop input{display:none}
 .money{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;margin:22px 0 60px;align-items:start}
 @media (max-width:820px){.money{grid-template-columns:minmax(0,1fr)}}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -325,7 +363,7 @@ dialog::backdrop{background:rgba(10,12,24,.62);backdrop-filter:blur(4px);-webkit
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}}
 @keyframes fade{from{opacity:0}}
 @media (max-width:600px){
-  dialog,dialog.sm{width:100%;max-width:100%;margin:auto 0 0;border-radius:18px 18px 0 0;border-bottom:0;max-height:94dvh}
+  dialog,dialog.sm,dialog.light{width:100%;max-width:100%;margin:auto 0 0;border-radius:18px 18px 0 0;border-bottom:0;max-height:94dvh}
   .dlg{max-height:94dvh;padding:18px 16px 0}
   .dlg .row-b{margin:0 -16px;padding-inline:16px}
   .dlg .row-b .btn{flex:1;justify-content:center;padding-block:11px}
@@ -474,6 +512,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <button class="tab" role="tab" id="tab-plan" aria-selected="true" data-view="plan">Approved <span class="n" id="n-app">0</span></button>
       <button class="tab" role="tab" id="tab-planning" aria-selected="false" data-view="planning">Planning <span class="n" id="n-sug">0</span></button>
       <button class="tab" role="tab" id="tab-cal" aria-selected="false" data-view="calendar">Calendar</button>
+      <button class="tab" role="tab" id="tab-photos" aria-selected="false" data-view="photos">Photos</button>
       <button class="tab" role="tab" id="tab-money" aria-selected="false" data-view="money">Money</button>
     </div>
     <div class="tools">
@@ -546,6 +585,25 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div class="sec-t">Members</div>
     <div class="mlist" id="mlist"></div>
     <div class="row-b"><button type="button" class="btn ghost" data-close>Done</button></div>
+  </form>
+</dialog>
+
+<dialog id="pdlg" aria-labelledby="p-title">
+  <form class="dlg" id="pform">
+    <div class="dlg-head"><h2 id="p-title">Add photos</h2><button type="button" class="x" data-close aria-label="Close">✕</button></div>
+    <p class="hint" id="p-hint">Up to 5 photos per person per day.</p>
+    <div class="fld"><label for="p-day">Day</label><select id="p-day"></select></div>
+    <label class="drop" for="p-files" id="p-drop">Choose photos<input id="p-files" type="file" accept="image/*" multiple></label>
+    <div class="upl" id="p-prev"></div>
+    <div class="status" id="p-status" role="status"></div>
+    <div class="row-b"><button type="button" class="btn ghost" data-close>Cancel</button><button type="submit" class="btn primary" id="p-save" disabled>Post</button></div>
+  </form>
+</dialog>
+
+<dialog id="ldlg" class="light" aria-label="Photo">
+  <form class="dlg" method="dialog">
+    <div class="stage"><button type="button" class="x" data-close aria-label="Close">✕</button><img id="l-img" alt=""><button type="button" class="nav prev" id="l-prev" aria-label="Previous photo">‹</button><button type="button" class="nav next" id="l-next" aria-label="Next photo">›</button></div>
+    <div class="cap"><span class="av" id="l-av"></span><div class="tx2"><b id="l-by"></b><span id="l-when"></span><p id="l-cap"></p></div><button type="button" class="btn sm ghost" id="l-del" style="color:#f4ecdf;border-color:#444" hidden>Delete</button></div>
   </form>
 </dialog>
 
@@ -687,7 +745,7 @@ const DEMO_EXP = [{id:'x1',title:'Rental car (5 days)',amount:310,paidBy:'You',s
 function demoStore(){
   let items = ls.get('trip-demo-items-v4', null) || SAMPLE;
   let user = ls.get('trip-demo-admin', false) ? {email:'demo admin'} : null;
-  const subs = new Set(), userSubs = new Set(), cSubs = new Map(); let mSub = () => {}, xSub = () => {}, metaSub = () => {};
+  const subs = new Set(), userSubs = new Set(), cSubs = new Map(); let mSub = () => {}, xSub = () => {}, metaSub = () => {}, pSub = () => {};
   const save = () => { ls.set('trip-demo-items-v4', items); subs.forEach(f=>f(items)); };
   return {
     mode:'demo',
@@ -700,6 +758,10 @@ function demoStore(){
     listenExpenses(f){ xSub = f; f(ls.get('trip-demo-exp', DEMO_EXP)); },
     async addExpense(x){ const l = ls.get('trip-demo-exp', DEMO_EXP); l.push({...x, id:'x'+Date.now(), uid:'me', createdAt:Date.now()}); ls.set('trip-demo-exp', l); this.listenExpenses(xSub); },
     async removeExpense(id){ ls.set('trip-demo-exp', (ls.get('trip-demo-exp', DEMO_EXP)).filter(x=>x.id!==id)); this.listenExpenses(xSub); },
+    listenPhotos(f){ pSub = f; f(ls.get('trip-demo-photos', [])); },
+    async addPhoto(id, meta2, full){ const l = ls.get('trip-demo-photos', []); l.push({...meta2, id, uid:'me', createdAt:Date.now()}); ls.set('trip-demo-photos', l); if (!ls.get('trip-demo-photos', []).some(x=>x.id===id)) throw new Error('This browser’s storage is full'); this.listenPhotos(pSub); },
+    async getFull(id){ return null; },
+    async removePhoto(id){ ls.set('trip-demo-photos', ls.get('trip-demo-photos', []).filter(x=>x.id!==id)); this.listenPhotos(pSub); },
     listenMeta(f){ metaSub = f; f(ls.get('trip-demo-meta', {travellers:['You','Example friend']})); },
     async saveMeta(m){ ls.set('trip-demo-meta', {...ls.get('trip-demo-meta', {}), ...m}); this.listenMeta(metaSub); },
     async saveProfile(pr){ ls.set('trip-demo-profile', pr); },
@@ -742,6 +804,13 @@ async function firebaseStore(conf){
     listenExpenses(f){ F.onSnapshot(F.collection(db, 'expenses'), s2 => f(s2.docs.map(d => ({id:d.id, ...d.data(), createdAt: d.data().createdAt?.toMillis?.() ?? Date.now()}))), e => console.error(e)); },
     addExpense(x){ return F.addDoc(F.collection(db, 'expenses'), {...x, uid: auth.currentUser.uid, createdAt: F.serverTimestamp()}); },
     removeExpense(id){ return F.deleteDoc(F.doc(db, 'expenses', id)); },
+    listenPhotos(f){ F.onSnapshot(F.collection(db, 'photos'), s2 => f(s2.docs.map(d => ({id:d.id, ...d.data(), createdAt: d.data().createdAt?.toMillis?.() ?? Date.now()}))), e => console.error(e)); },
+    async addPhoto(id, meta2, full){
+      await F.setDoc(F.doc(db, 'photoFull', id), {uid: auth.currentUser.uid, data: full});
+      await F.setDoc(F.doc(db, 'photos', id), {...meta2, uid: auth.currentUser.uid, createdAt: F.serverTimestamp()});
+    },
+    async getFull(id){ try { const d = await F.getDoc(F.doc(db, 'photoFull', id)); return d.exists() ? d.data().data : null; } catch { return null; } },
+    async removePhoto(id){ await F.deleteDoc(F.doc(db, 'photos', id)); await F.deleteDoc(F.doc(db, 'photoFull', id)).catch(()=>{}); },
     listenMeta(f){ F.onSnapshot(F.doc(db, 'meta', 'trip'), d => f(d.exists() ? d.data() : {}), e => console.error(e)); },
     saveMeta(m){ return F.setDoc(F.doc(db, 'meta', 'trip'), m, {merge: true}); },
     async getProfile(){ try { const d = await F.getDoc(F.doc(db, 'profiles', auth.currentUser.uid)); return d.exists() ? d.data() : null; } catch { return null; } },
@@ -795,7 +864,7 @@ async function firebaseStore(conf){
 
 /* ---------- state ---------- */
 let store, items = [], user = null;
-const VIEWS = ['plan','planning','calendar','money'];
+const VIEWS = ['plan','planning','calendar','photos','money'];
 let view = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'plan';
 let profile = null;
 let adminView = ls.get('trip-admin-view', true);
@@ -868,6 +937,93 @@ function planCell(d, list){
   const tot = dayCost(list);
   return `<div class="plan">${rows}</div>${extra}${list.length?`<div class="daytotal">Day total <b>${money(tot)}</b> per person</div>`:''}`;
 }
+/* ---------- photos ---------- */
+let photos = [], photosOn = false, pFilter = {who:'', day:''}, pList = [], pIdx = 0;
+const tripDay = () => DAYS.some(d=>d.date===localKey()) ? localKey() : DAYS[0].date;
+const dayLabel = k => { const dt = parseDay(k); return `${WD[dt.getDay()]} ${dt.getDate()} ${MON[dt.getMonth()]}`; };
+function startPhotos(){ if (photosOn) return; photosOn = true; store.listenPhotos(l => { photos = l.sort((a,b)=>a.createdAt-b.createdAt); if (view === 'photos') render(); }); }
+function renderPhotos(){
+  startPhotos();
+  const people = [...new Map(photos.map(p2 => [p2.uid, p2.author||'Someone'])).entries()];
+  const list = photos.filter(p2 => (!pFilter.who || p2.uid === pFilter.who) && (!pFilter.day || p2.day === pFilter.day));
+  pList = [...list].sort((a,b) => a.day.localeCompare(b.day) || a.createdAt - b.createdAt);
+  const byDay = DAYS.map(d => [d, pList.filter(p2=>p2.day===d.date)]).filter(([,l])=>l.length);
+  const who = pFilter.who && people.find(([u])=>u===pFilter.who);
+  const tile = p2 => `<button class="pt" data-act="photo" data-id="${esc(p2.id)}" aria-label="Photo by ${esc(p2.author)}${p2.caption?': '+esc(p2.caption):''}"><img src="${esc(p2.thumb)}" alt="${esc(p2.caption||'')}" loading="lazy">${pFilter.who?'':`<span class="by"><span class="av" style="background:${avColor(p2.author||'?')}">${esc(initials(p2.author))}</span>${esc(p2.author||'')}</span>`}</button>`;
+  $('#ledger').innerHTML = `
+    <div class="ph-tools">
+      <div class="chips" role="radiogroup" aria-label="Whose photos">
+        <input type="radio" name="pw" id="pw-all" value="" ${!pFilter.who?'checked':''}><label class="all" for="pw-all">Everyone</label>
+        ${people.map(([u,n],i)=>`<input type="radio" name="pw" id="pw-${i}" value="${esc(u)}" ${pFilter.who===u?'checked':''}><label for="pw-${i}"><span class="av" style="width:22px;height:22px;font-size:10px;background:${avColor(n)}">${esc(initials(n))}</span>${esc(n)}</label>`).join('')}
+      </div>
+      <div class="navbtns"><select id="pf-day" aria-label="Day"><option value="">All days</option>${DAYS.map(d=>`<option value="${d.date}" ${pFilter.day===d.date?'selected':''}>${dayLabel(d.date)}</option>`).join('')}</select><button class="btn primary" data-act="addphotos">+ Add photos</button></div>
+    </div>
+    ${who ? `<div class="prof"><span class="av" style="background:${avColor(who[1])}">${esc(initials(who[1]))}</span><div><b>${esc(who[1])}</b><span>${list.length} photo${list.length===1?'':'s'} · ${new Set(list.map(x=>x.day)).size} day${new Set(list.map(x=>x.day)).size===1?'':'s'}</span></div></div>` : ''}
+    ${byDay.length ? byDay.map(([d,l]) => `<section class="pday"><h4>${dayLabel(d.date)} <small>${esc(d.hol || d.city.name)} · ${l.length}</small></h4><div class="pgrid">${l.map(tile).join('')}</div></section>`).join('')
+      : `<div class="gate" style="margin-top:10px"><h2>No photos yet</h2><p>Share the best moments of each day. Everyone can post up to 5 photos per day, and they show up here for the whole group.</p><div class="btns"><button class="btn primary" data-act="addphotos">+ Add photos</button></div></div>`}`;
+  document.querySelectorAll('input[name=pw]').forEach(r => r.onchange = () => { pFilter.who = r.value; render(); });
+  $('#pf-day').onchange = e => { pFilter.day = e.target.value; render(); };
+}
+// --- upload ---
+const pdlg = $('#pdlg'); let pFiles = [];
+$('#p-day').innerHTML = DAYS.map(d=>`<option value="${d.date}">${dayLabel(d.date)} · ${esc(d.city.name)}</option>`).join('');
+const usedSlots = day => new Set(photos.filter(x=>x.uid===myUid() && x.day===day).map(x=>+x.id.split('_').pop()));
+function pRefresh(){
+  const day = $('#p-day').value, left = 5 - usedSlots(day).size;
+  $('#p-hint').textContent = left > 0 ? `You can add ${left} more photo${left===1?'':'s'} for this day.` : 'You’ve posted 5 photos for this day. Pick another day or delete one first.';
+  pFiles = pFiles.slice(0, Math.max(0,left));
+  $('#p-prev').innerHTML = pFiles.map((f,i)=>`<div class="u"><img src="${f.url}" alt=""><input data-i="${i}" maxlength="140" placeholder="Caption (optional)" value="${esc(f.cap||'')}"></div>`).join('');
+  $('#p-drop').hidden = left <= 0 || pFiles.length >= left;
+  $('#p-save').disabled = !pFiles.length; $('#p-save').textContent = pFiles.length ? `Post ${pFiles.length} photo${pFiles.length===1?'':'s'}` : 'Post';
+}
+function openPhotos(){ pFiles = []; $('#p-day').value = pFilter.day || tripDay(); $('#p-status').textContent = ''; pRefresh(); openModal(pdlg); }
+$('#p-day').onchange = pRefresh;
+$('#p-files').onchange = e => { for (const f of e.target.files) if (f.type.startsWith('image/')) pFiles.push({file:f, url:URL.createObjectURL(f), cap:''}); e.target.value=''; pRefresh(); };
+$('#p-prev').addEventListener('input', e => { const i = e.target.dataset.i; if (i != null) pFiles[i].cap = e.target.value; });
+async function shrink(file, max, maxBytes){
+  let src;
+  try { src = await createImageBitmap(file, {imageOrientation:'from-image'}); }
+  catch { src = await new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = URL.createObjectURL(file); }); }
+  const w0 = src.width, h0 = src.height, k = Math.min(1, max / Math.max(w0, h0));
+  const c = document.createElement('canvas'); c.width = Math.round(w0*k); c.height = Math.round(h0*k);
+  c.getContext('2d').drawImage(src, 0, 0, c.width, c.height);
+  for (let q = .8; q > .35; q -= .1) { const d = c.toDataURL('image/jpeg', q); if (d.length < maxBytes) return {data:d, w:c.width, h:c.height}; }
+  return {data: c.toDataURL('image/jpeg', .35), w:c.width, h:c.height};
+}
+$('#pform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const day = $('#p-day').value, used = usedSlots(day), free = [1,2,3,4,5].filter(n=>!used.has(n));
+  const b = $('#p-save'); b.disabled = true; let done = 0;
+  try {
+    for (const f of pFiles.slice(0, free.length)) {
+      $('#p-status').className = 'status'; $('#p-status').textContent = `Uploading ${done+1} of ${pFiles.length}…`;
+      const [full, th] = await Promise.all([shrink(f.file, 1600, 900000), shrink(f.file, 420, 60000)]);
+      const id = `${myUid()}_${day}_${free[done]}`;
+      await store.addPhoto(id, {day, author: myName().slice(0,40) || 'Someone', caption: (f.cap||'').trim().slice(0,140), thumb: th.data, w: full.w, h: full.h}, full.data);
+      done++;
+    }
+    pdlg.close(); toast(`${done} photo${done===1?'':'s'} posted`); pFilter.day = ''; if (view !== 'photos') { view = 'photos'; } render();
+  } catch (err) { console.error(err); $('#p-status').textContent = (done ? `${done} posted. ` : '') + fbMsg(err); $('#p-status').className = 'status err'; }
+  finally { b.disabled = false; }
+});
+// --- lightbox ---
+const ldlg = $('#ldlg');
+async function showPhoto(i){
+  pIdx = (i + pList.length) % pList.length; const p2 = pList[pIdx]; if (!p2) return;
+  $('#l-img').src = p2.thumb; $('#l-img').alt = p2.caption || `Photo by ${p2.author}`;
+  $('#l-av').textContent = initials(p2.author); $('#l-av').style.background = avColor(p2.author||'?');
+  $('#l-by').textContent = p2.author || 'Someone'; $('#l-when').textContent = `${dayLabel(p2.day)} · ${ago(p2.createdAt)}`; $('#l-cap').textContent = p2.caption || '';
+  $('#l-del').hidden = !(isAdmin() || p2.uid === myUid());
+  $('#l-prev').hidden = $('#l-next').hidden = pList.length < 2;
+  const full = await store.getFull(p2.id); if (full && pList[pIdx] === p2) $('#l-img').src = full;
+}
+$('#l-prev').onclick = () => showPhoto(pIdx - 1);
+$('#l-next').onclick = () => showPhoto(pIdx + 1);
+ldlg.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') showPhoto(pIdx - 1); if (e.key === 'ArrowRight') showPhoto(pIdx + 1); });
+let tx0 = null; $('#l-img').addEventListener('touchstart', e => tx0 = e.touches[0].clientX, {passive:true});
+$('#l-img').addEventListener('touchend', e => { if (tx0 == null) return; const dx = e.changedTouches[0].clientX - tx0; if (Math.abs(dx) > 50) showPhoto(pIdx + (dx < 0 ? 1 : -1)); tx0 = null; });
+$('#l-del').onclick = async () => { const p2 = pList[pIdx]; if (!p2) return; try { await store.removePhoto(p2.id); ldlg.close(); toast('Photo deleted'); } catch (err) { toast(fbMsg(err)); } };
+
 /* ---------- money ---------- */
 let expenses = [], meta = {}, moneyOn = false;
 const travellers = () => (meta.travellers && meta.travellers.length) ? meta.travellers : (myName() ? [myName()] : []);
@@ -1029,6 +1185,7 @@ function render(){
   const head = `<div class="head"><div>Day</div><div>Where &amp; fixed</div><div>${view==='planning'?'Suggestions':'Plan for the day'}</div></div>`;
   if (view === 'calendar') { renderCalendar(); renderCount(); return; }
   if (view === 'money') { renderMoney(); renderCount(); return; }
+  if (view === 'photos') { renderPhotos(); renderCount(); return; }
   const rows = DAYS.map(d=>{
     const mine = items.filter(i=>i.day===d.date).sort((a,b)=> view==='planning' ? tally(b).score - tally(a).score || toMin(a.time)-toMin(b.time) : toMin(a.time)-toMin(b.time));
     const content = view==='planning'
@@ -1199,6 +1356,8 @@ $('#ledger').addEventListener('click', async e => {
         break; }
       case 'comments': openComments(it); break;
       case 'addexp': openExpense(); break;
+      case 'addphotos': openPhotos(); break;
+      case 'photo': { const i = pList.findIndex(x=>x.id===id); openModal(ldlg); showPhoto(i); break; }
       case 'travellers': e.preventDefault(); $('#t-names').value = travellers().join('\n'); openModal(tdlg); break;
       case 'settle': await store.addExpense({title:'Settle up', amount:+b.dataset.amt, paidBy:b.dataset.from, split:[b.dataset.to], kind:'settle', author: myName().slice(0,40)}); toast('Marked as paid'); break;
       case 'delexp': await store.removeExpense(id); toast('Deleted'); break;
