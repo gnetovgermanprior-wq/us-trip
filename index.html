@@ -373,8 +373,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 <div class="bar">
   <div class="wrap">
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-planning" aria-selected="true" data-view="planning">Planning <span class="n" id="n-sug">0</span></button>
-      <button class="tab" role="tab" id="tab-plan" aria-selected="false" data-view="plan">Approved <span class="n" id="n-app">0</span></button>
+      <button class="tab" role="tab" id="tab-plan" aria-selected="true" data-view="plan">Approved <span class="n" id="n-app">0</span></button>
+      <button class="tab" role="tab" id="tab-planning" aria-selected="false" data-view="planning">Planning <span class="n" id="n-sug">0</span></button>
       <button class="tab" role="tab" id="tab-cal" aria-selected="false" data-view="calendar">Calendar</button>
     </div>
     <div class="tools">
@@ -553,8 +553,8 @@ async function firebaseStore(conf){
 
 /* ---------- state ---------- */
 let store, items = [], user = null;
-const VIEWS = ['planning','plan','calendar'];
-let view = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'planning';
+const VIEWS = ['plan','planning','calendar'];
+let view = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'plan';
 let liked = new Set(ls.get('trip-liked', []));
 let editing = null;
 const isAdmin = () => store?.isAdmin(user);
@@ -704,7 +704,7 @@ function render(){
   $('#ledger').innerHTML = head + rows;
   if (store?.mode === 'live' && !$('#notice').dataset.error) {
     $('#notice').hidden = items.length > 0;
-    if (!items.length) $('#notice').innerHTML = '<b>Welcome!</b> No suggestions yet. Pick a day below and tap “Suggest something” to add the first idea.';
+    if (!items.length) $('#notice').innerHTML = '<b>Welcome!</b> No suggestions yet. Open the <b>Planning</b> tab, pick a day and add the first idea.';
   }
   renderCount();
 }
