@@ -493,6 +493,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div id="mreq"></div>
     <div class="sec-t">Add someone</div>
     <div class="addrow"><input id="m-email" type="email" placeholder="friend@gmail.com" aria-label="Google email" class="fldi"><input id="m-name" maxlength="40" placeholder="Name" aria-label="Name" class="fldi"><button type="submit" class="btn primary">Add</button></div>
+    <div class="status" id="m-status" role="status"></div>
     <div class="sec-t">Members</div>
     <div class="mlist" id="mlist"></div>
     <div class="row-b"><button type="button" class="btn ghost" data-close>Done</button></div>
@@ -558,7 +559,7 @@ function thumb(it, cls='thumb'){
   const ph = placeholder(it.title, (it.site && it.site!=='example') ? it.site : host(it.url));
   return img ? `${ph}<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ph;
 }
-function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg; document.body.append(t); setTimeout(()=>t.remove(),2400); }
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg; (document.querySelector('dialog[open]')||document.body).append(t); setTimeout(()=>t.remove(),3200); }
 const money = n => n == null ? '' : n === 0 ? 'Free' : '$' + (+n).toLocaleString('en-US', n % 1 ? {minimumFractionDigits: 2, maximumFractionDigits: 2} : {maximumFractionDigits: 0});
 function costOf(it){
   if (typeof it.cost === 'number' && isFinite(it.cost)) return it.cost;
@@ -677,8 +678,9 @@ async function firebaseStore(conf){
     },
     listenMembers(f){
       let m = [], r = [];
-      F.onSnapshot(F.collection(db, 'members'), s2 => { m = s2.docs.map(d=>d.data()); f(m, r); });
-      F.onSnapshot(F.collection(db, 'requests'), s2 => { r = s2.docs.map(d=>d.data()); f(m, r); });
+      const bad = e => { console.error(e); try { mStatus(fbMsg(e), true); } catch {} };
+      F.onSnapshot(F.collection(db, 'members'), s2 => { m = s2.docs.map(d=>d.data()); f(m, r); }, bad);
+      F.onSnapshot(F.collection(db, 'requests'), s2 => { r = s2.docs.map(d=>d.data()); f(m, r); }, bad);
     },
     async addMember(email, name){
       await F.setDoc(F.doc(db, 'members', email), {email, name: String(name||'').slice(0,60), addedAt: F.serverTimestamp()});
@@ -1055,20 +1057,32 @@ function drawMembers(){
     members.map(m=>`<div class="mrow"><span class="av" style="background:${avColor(m.name||m.email)}">${esc(initials(m.name||m.email))}</span><div class="tx"><b>${esc(m.name||'No name')}</b><span>${esc(m.email)}</span></div><button type="button" class="btn sm ghost" data-mact="remove" data-email="${esc(m.email)}">Remove</button></div>`).join('');
   const n = reqs.length; $('#members-btn').innerHTML = `Members${n?` <span class="badge-n">${n}</span>`:''}`;
 }
-$('#members-btn').onclick = () => openModal(mdlg);
+const fbMsg = e => /permission/i.test(e?.code||e?.message||'')
+  ? 'Firebase refused this. Check that the new rules are published (Firestore → Rules → Publish) and that your email is in adminEmails.'
+  : e?.code === 'timeout' ? 'No answer from Firebase. Check your internet connection and try again.'
+  : 'Couldn’t save. Please try again.' + (e?.code ? ` (${e.code})` : '');
+function mStatus(msg, err){ const el = $('#m-status'); el.textContent = msg; el.className = 'status' + (err ? ' err' : ''); }
+$('#members-btn').onclick = () => { mStatus(''); openModal(mdlg); };
 mdlg.addEventListener('click', async e => {
   const b = e.target.closest('[data-mact]'); if (!b) return;
   try {
     if (b.dataset.mact === 'accept') { await store.addMember(b.dataset.email, b.dataset.name); toast('Added. They can open the plan now'); }
     if (b.dataset.mact === 'decline') await store.declineRequest(b.dataset.email);
     if (b.dataset.mact === 'remove') { await store.removeMember(b.dataset.email); toast('Removed'); }
-  } catch { toast('That didn’t work. Please try again.'); }
+  } catch (err) { console.error(err); mStatus(fbMsg(err), true); }
 });
 $('#mform').addEventListener('submit', async e => {
   e.preventDefault();
   const email = $('#m-email').value.trim().toLowerCase(), name = $('#m-name').value.trim();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast('Enter a full email address, like name@gmail.com'); return; }
-  try { await store.addMember(email, name); $('#m-email').value = ''; $('#m-name').value = ''; toast('Added'); } catch { toast('Couldn’t add. Please try again.'); }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { mStatus('Enter a full email address, like name@gmail.com', true); $('#m-email').focus(); return; }
+  const b = e.submitter || $('#mform button[type=submit]'); b.disabled = true; mStatus('Adding…');
+  try {
+    await Promise.race([store.addMember(email, name), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 12000))]);
+    if (!members.some(m => m.email === email)) members = [...members, {email, name}];
+    drawMembers();
+    $('#m-email').value = ''; $('#m-name').value = ''; mStatus(`${name || email} can now open the plan.`);
+  } catch (err) { console.error(err); mStatus(fbMsg(err), true); }
+  finally { b.disabled = false; }
 });
 
 /* ---------- export ---------- */
