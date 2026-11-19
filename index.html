@@ -77,16 +77,20 @@ a{color:var(--accent)}
 
 /* ---------- header band ---------- */
 .band{background:radial-gradient(120% 90% at 80% 0%,var(--band2),var(--band) 70%);color:var(--band-ink);position:relative;overflow:hidden;isolation:isolate}
-.band .wrap{padding-block:46px 120px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;position:relative;z-index:2}
-#snow{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.skyline{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;pointer-events:none}
-.skyline svg{width:100%;height:100%;display:block}
+.band .wrap{padding-block:56px 92px;min-height:min(62vh,520px);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;position:relative;z-index:2}
+.photo{position:absolute;inset:0;z-index:0;background-size:cover;background-repeat:no-repeat;transition:opacity .6s ease}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,22,.82) 0%,rgba(8,10,22,.45) 55%,rgba(8,10,22,.25) 100%),linear-gradient(0deg,rgba(8,10,22,.7),transparent 45%)}
+.band[data-scene="fl"] .photo{background-image:url("img/orlando-1920.webp");background-position:center 62%}
+.band[data-scene="ny"] .photo{background-image:url("img/newyork-1920.webp");background-position:center 28%}
+#fx{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.scene-btn{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:14px;z-index:3;font-size:12px;font-weight:600;color:var(--band-ink);background:rgba(8,10,22,.45);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;cursor:pointer;backdrop-filter:blur(6px)}
+.scene-btn:hover{border-color:var(--brass)}
 .lights{position:absolute;top:0;left:0;right:0;height:34px;z-index:2;pointer-events:none}
 .lights svg{width:100%;height:100%;display:block}
 .bulb{animation:twinkle 2.6s ease-in-out infinite}
 @keyframes twinkle{50%{opacity:.35}}
 .eyebrow{font-family:var(--f-deco);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--brass);font-weight:600}
-h1{font-family:var(--f-display);font-weight:600;font-size:clamp(42px,7.4vw,84px);line-height:.98;margin:.22em 0 .18em;text-wrap:balance;letter-spacing:-.01em}
+h1{text-shadow:0 2px 24px rgba(0,0,0,.45);font-family:var(--f-display);font-weight:600;font-size:clamp(42px,7.4vw,84px);line-height:.98;margin:.22em 0 .18em;text-wrap:balance;letter-spacing:-.01em}
 h1 .amp{color:var(--brass);font-style:italic;font-weight:500}
 h1 em{font-style:italic;font-weight:500}
 .sub{color:var(--band-muted);font-size:14px}
@@ -223,8 +227,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .band .wrap{grid-template-columns:1fr}
   .count{text-align:left}
   .count .big{font-size:52px}
-  .band .wrap{padding-block:40px 100px}
-  .skyline{height:96px}
+  .band .wrap{padding-block:48px 72px;min-height:0}
+  .band[data-scene="fl"] .photo{background-image:url("img/orlando-960.webp")}
+  .band[data-scene="ny"] .photo{background-image:url("img/newyork-960.webp")}
   .head{display:none}
   .row{grid-template-columns:auto minmax(0,1fr)}
   .row>.c.ideas{grid-column:1/-1;padding-top:0}
@@ -244,10 +249,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </style>
 </head>
 <body>
-<header class="band">
-  <canvas id="snow" aria-hidden="true"></canvas>
+<header class="band" data-scene="fl">
+  <div class="photo" aria-hidden="true"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
   <div class="lights" id="lights" aria-hidden="true"></div>
-  <div class="skyline" id="skyline" aria-hidden="true"></div>
+  <button class="scene-btn" id="scene-btn" type="button">Peek at New York</button>
   <div class="wrap">
     <div>
       <div class="eyebrow">Christmas &amp; New Year · USA 2026</div>
@@ -604,25 +610,14 @@ $('#admin-btn').onclick = async () => {
   catch (e) { toast('Sign in failed: ' + e.message); }
 };
 
-/* ---------- header decoration: skyline, string lights, snow ---------- */
+/* ---------- header scene: Orlando palms until Dec 29 09:00 Orlando time, then the New York tree ---------- */
+const NY_SWITCH = Date.parse('2026-12-29T09:00:00-05:00');
 (function decorate(){
-  // Manhattan skyline with lit windows (seeded, so it looks the same every visit)
-  let seed = 7; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
-  const W = 1600, H = 120; let x = 0, out = '';
-  const fills = ['#0b0e1d','#0e1226','#090c19'];
-  while (x < W) {
-    const w = 26 + rnd()*54, special = rnd() < .07;
-    const h = special ? 95 + rnd()*20 : 30 + rnd()*62;
-    const f = fills[Math.floor(rnd()*3)];
-    out += `<rect x="${x.toFixed(1)}" y="${(H-h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${f}"/>`;
-    if (special) { // spire, a nod to the Empire State & Chrysler buildings
-      out += `<rect x="${(x+w*.3).toFixed(1)}" y="${(H-h-12).toFixed(1)}" width="${(w*.4).toFixed(1)}" height="12" fill="${f}"/><rect x="${(x+w/2-1).toFixed(1)}" y="${(H-h-34).toFixed(1)}" width="2" height="22" fill="${f}"/><circle cx="${(x+w/2).toFixed(1)}" cy="${(H-h-35).toFixed(1)}" r="1.6" fill="#ff6b6b"/>`;
-    }
-    for (let wy = H-h+6; wy < H-6; wy += 8) for (let wx = x+4; wx < x+w-5; wx += 7)
-      if (rnd() < .22) out += `<rect x="${wx.toFixed(1)}" y="${wy.toFixed(1)}" width="2.6" height="3.4" fill="#f3c969" opacity="${(.45+rnd()*.5).toFixed(2)}"/>`;
-    x += w + rnd()*3;
-  }
-  document.getElementById('skyline').innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMax slice">${out}</svg>`;
+  const band = document.querySelector('.band');
+  let scene = Date.now() >= NY_SWITCH ? 'ny' : 'fl';
+  const cv = document.getElementById('fx'), ctx = cv.getContext('2d');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let parts = [], w = 0, h = 0, raf = 0;
 
   // A sagging string of Christmas lights across the top
   const colors = ['#ff5a5f','#ffd166','#7bd389','#6ec1ff','#f7a8d8'];
@@ -636,17 +631,41 @@ $('#admin-btn').onclick = async () => {
   }
   document.getElementById('lights').innerHTML = `<svg viewBox="0 0 ${n*seg} 34" preserveAspectRatio="none"><path d="${path}" stroke="#3a3f5c" stroke-width="1.2" fill="none"/>${bulbs}</svg>`;
 
-  // Gentle snowfall
-  const cv = document.getElementById('snow'), ctx = cv.getContext('2d');
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let flakes = [], w = 0, h = 0;
-  const size = () => { const r = cv.getBoundingClientRect(), d = devicePixelRatio||1; w = r.width; h = r.height; cv.width = w*d; cv.height = h*d; ctx.setTransform(d,0,0,d,0,0);
-    flakes = Array.from({length: Math.round(w/14)}, () => ({x:Math.random()*w, y:Math.random()*h, r:.6+Math.random()*1.8, s:.2+Math.random()*.6, d:Math.random()*6.28})); };
-  const draw = () => { ctx.clearRect(0,0,w,h); ctx.fillStyle = 'rgba(255,255,255,.75)';
-    for (const f of flakes) { ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.283); ctx.fill(); } };
-  const tick = () => { for (const f of flakes) { f.y += f.s; f.d += .01; f.x += Math.sin(f.d)*.3; if (f.y > h+3) { f.y = -3; f.x = Math.random()*w; } } draw(); requestAnimationFrame(tick); };
-  size(); addEventListener('resize', size);
-  if (still) draw(); else tick();
+  // Particles: snow for New York, glowing fireflies for Orlando
+  const make = () => scene === 'ny'
+    ? Array.from({length: Math.round(w/12)}, () => ({x:Math.random()*w, y:Math.random()*h, r:.6+Math.random()*1.9, s:.25+Math.random()*.6, d:Math.random()*6.28}))
+    : Array.from({length: Math.round(w/26)}, () => ({x:Math.random()*w, y:h*.25+Math.random()*h*.75, r:1+Math.random()*1.8, s:.08+Math.random()*.25, d:Math.random()*6.28, p:Math.random()*6.28}));
+  const size = () => { const r = cv.getBoundingClientRect(), dpr = devicePixelRatio||1; w = r.width; h = r.height; cv.width = w*dpr; cv.height = h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); parts = make(); if (still) draw(); };
+  const draw = () => {
+    ctx.clearRect(0,0,w,h);
+    if (scene === 'ny') {
+      ctx.fillStyle = 'rgba(255,255,255,.8)';
+      for (const f of parts) { ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.283); ctx.fill(); }
+    } else {
+      for (const f of parts) {
+        const a = .35 + .65*Math.max(0, Math.sin(f.p));
+        const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r*6);
+        g.addColorStop(0, `rgba(255,214,120,${a})`); g.addColorStop(.25, `rgba(255,170,70,${a*.45})`); g.addColorStop(1, 'rgba(255,140,40,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(f.x, f.y, f.r*6, 0, 6.283); ctx.fill();
+      }
+    }
+  };
+  const step = () => {
+    for (const f of parts) {
+      if (scene === 'ny') { f.y += f.s; f.d += .01; f.x += Math.sin(f.d)*.3; if (f.y > h+3) { f.y = -3; f.x = Math.random()*w; } }
+      else { f.y -= f.s; f.d += .012; f.p += .03; f.x += Math.sin(f.d)*.45; if (f.y < -10) { f.y = h+10; f.x = Math.random()*w; } }
+    }
+    draw(); raf = requestAnimationFrame(step);
+  };
+  const setScene = sc => {
+    scene = sc; band.dataset.scene = sc;
+    const t = document.getElementById('scene-btn');
+    t.textContent = sc === 'ny' ? 'Peek at Orlando' : 'Peek at New York';
+    parts = make(); if (still) draw();
+  };
+  document.getElementById('scene-btn').onclick = () => setScene(scene === 'ny' ? 'fl' : 'ny');
+  setScene(scene); size(); addEventListener('resize', size);
+  if (!still) step();
 })();
 
 /* ---------- boot ---------- */
