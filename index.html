@@ -180,8 +180,23 @@ h1 em{font-style:italic;font-weight:500}
 .foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:6px;font-size:12px;color:var(--muted)}
 .adm{display:flex;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
 .adm .btn.ok{flex:1;justify-content:center}
-.like{border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 11px;cursor:pointer;font-size:12px;display:inline-flex;gap:5px;align-items:center;color:var(--muted)}
-.like[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.vote{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.vote button{border:0;background:transparent;padding:5px 10px;cursor:pointer;font-size:12px;display:inline-flex;gap:5px;align-items:center;color:var(--muted);font-family:var(--f-mono)}
+.vote button+button{border-left:1px solid var(--line)}
+.vote svg{width:14px;height:14px}
+.vote button:hover{color:var(--ink);background:var(--sunk)}
+.vote button[data-v="1"][aria-pressed="true"]{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.vote button[data-v="-1"][aria-pressed="true"]{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.me-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 12px 3px 3px;cursor:pointer;font-weight:600;font-size:13px;color:var(--ink)}
+.me-btn .av{width:28px;height:28px;font-size:12px}
+.me-btn .mode{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.switch b{display:block;font-size:14px}
+.switch span{display:block;font-size:12.5px;color:var(--muted)}
+.sw-in{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;flex:none;transition:background .15s}
+.sw-in::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.sw-in:checked{background:var(--ok)}
+.sw-in:checked::after{transform:translateX(18px)}
 .add{border:1.5px dashed var(--line);background:transparent;border-radius:10px;min-height:120px;cursor:pointer;color:var(--muted);font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13.5px}
 .add:hover{border-color:var(--accent);color:var(--accent)}
 .add .plus{font-family:var(--f-display);font-size:34px;line-height:1}
@@ -220,7 +235,7 @@ body.gated .bar .tabs,body.gated #ledger,body.gated #notice{display:none!importa
 /* comments */
 .cbtn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 11px;cursor:pointer;font-size:12px;display:inline-flex;gap:5px;align-items:center;color:var(--muted)}
 .cbtn svg{width:13px;height:13px}
-.cbtn:hover,.like:hover{border-color:var(--brass)}
+.cbtn:hover{border-color:var(--brass)}
 .foot .r{display:flex;gap:6px}
 .clist{display:flex;flex-direction:column;gap:12px;max-height:46dvh;overflow-y:auto;padding-right:2px}
 .cm{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px}
@@ -251,7 +266,7 @@ body.gated .bar .tabs,body.gated #ledger,body.gated #notice{display:none!importa
 .export p{margin:2px 0 0;font-size:13px;color:var(--muted)}
 .export .btns{display:flex;gap:8px;flex-wrap:wrap}
 @media print{
-  .band,.bar,#notice,footer,.export,.cal-tools,.adm,.like,.cbtn,.add,.toast,dialog{display:none!important}
+  .band,.bar,#notice,footer,.export,.cal-tools,.adm,.vote,.cbtn,.add,.toast,dialog{display:none!important}
   body{background:#fff;color:#000}
   .row{break-inside:avoid}
   .ledger{margin:0}
@@ -433,6 +448,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <span class="who" id="who"></span>
       <button class="btn" id="members-btn" hidden>Members</button>
       <button class="btn" id="admin-btn">Admin sign in</button>
+      <button class="me-btn" id="me-btn" hidden aria-label="Your settings"></button>
     </div>
   </div>
 </div>
@@ -497,6 +513,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div class="sec-t">Members</div>
     <div class="mlist" id="mlist"></div>
     <div class="row-b"><button type="button" class="btn ghost" data-close>Done</button></div>
+  </form>
+</dialog>
+
+<dialog id="medlg" class="sm" aria-labelledby="me-title">
+  <form class="dlg" id="meform">
+    <div class="dlg-head"><h2 id="me-title">You</h2><button type="button" class="x" data-close aria-label="Close">✕</button></div>
+    <p class="hint" id="me-email"></p>
+    <div class="fld"><label for="me-name">Your name</label><input id="me-name" maxlength="40" required placeholder="How others see you"></div>
+    <label class="switch" for="me-mail"><div><b>Morning email</b><span>The day’s plan at 8:00 during the trip</span></div><input type="checkbox" class="sw-in" id="me-mail" checked></label>
+    <label class="switch" for="me-admin" id="me-admin-row" hidden><div><b>Admin tools</b><span>Turn off to see the site like everyone else</span></div><input type="checkbox" class="sw-in" id="me-admin" checked></label>
+    <div class="status" id="me-status" role="status"></div>
+    <div class="row-b"><button type="button" class="btn ghost" id="me-out">Sign out</button><button type="submit" class="btn primary">Save</button></div>
   </form>
 </dialog>
 
@@ -569,6 +597,9 @@ function costOf(it){
 }
 const priceLabel = it => { const c = costOf(it); return c == null ? (it.price||'') : c === 0 ? 'Free' : `${money(c)} pp`; };
 const dayCost = list => list.reduce((a,i) => a + (costOf(i)||0), 0);
+const ICON_UP = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2.5A.5.5 0 0 1 2 13.5v-6a.5.5 0 0 1 .5-.5H5zm0 0 2.6-5.2a1.3 1.3 0 0 1 2.4.9L9.4 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+const ICON_DOWN = ICON_UP.replace('<svg ', '<svg style="transform:rotate(180deg)" ');
+const tally = it => { let up = 0, down = 0; for (const v of Object.values(it.votes||{})) v > 0 ? up++ : down++; return {up, down, score: up - down}; };
 const ICON_CM = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2.5h10a1 1 0 0 1 1 1V9a1 1 0 0 1-1 1H6l-3 2.5V10H2a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
 const ICON_G = '<svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.6 9.2c0-.6-.1-1.2-.2-1.7H9v3.3h4.8a4.1 4.1 0 0 1-1.8 2.7v2.2h2.9c1.7-1.6 2.7-3.9 2.7-6.5z"/><path fill="#34A853" d="M9 18c2.4 0 4.5-.8 6-2.2l-2.9-2.2c-.8.5-1.8.9-3.1.9-2.4 0-4.4-1.6-5.1-3.7H.9v2.3A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.9 10.8a5.4 5.4 0 0 1 0-3.5V5H.9a9 9 0 0 0 0 8.1l3-2.3z"/><path fill="#EA4335" d="M9 3.6c1.3 0 2.5.5 3.5 1.4l2.6-2.6A9 9 0 0 0 .9 5l3 2.3C4.6 5.2 6.6 3.6 9 3.6z"/></svg>';
 const initials = n => (String(n||'?').trim()[0]||'?').toUpperCase();
@@ -587,9 +618,9 @@ async function unfurl(url){
 
 /* ---------- data stores ---------- */
 const SAMPLE = [
-  {day:'2026-12-25',cat:'gastro',end:'21:00',title:'Christmas dinner on International Drive',site:'example',cost:60,price:'$60 pp',time:'19:00',note:'Book ahead, Christmas Day fills up fast.',author:'Example',status:'suggested',likes:1},
+  {day:'2026-12-25',cat:'gastro',end:'21:00',title:'Christmas dinner on International Drive',site:'example',cost:60,price:'$60 pp',time:'19:00',note:'Book ahead, Christmas Day fills up fast.',author:'Example',status:'suggested',likes:1,votes:{a:1,b:1}},
   {day:'2026-12-26',cat:'activity',end:'16:00',title:'Kennedy Space Center Visitor Complex',site:'kennedyspacecenter.com',url:'https://www.kennedyspacecenter.com/',cost:75,price:'$75 pp',comments:1,time:'09:00',note:'About 1 hour drive east. Full day.',author:'Example',status:'approved',likes:2},
-  {day:'2026-12-27',title:'Day trip to St. Augustine',site:'example',price:'Gas only',time:'08:30',note:'Oldest city in the US, 2 hours north.',author:'Example',status:'suggested',likes:0},
+  {day:'2026-12-27',title:'Day trip to St. Augustine',site:'example',price:'Gas only',time:'08:30',note:'Oldest city in the US, 2 hours north.',author:'Example',status:'suggested',likes:0,votes:{a:1,b:-1}},
   {day:'2026-12-30',cat:'gastro',time:'18:30',end:'20:00',title:'Pizza at a classic slice shop',site:'example',cost:15,price:'$15 pp',note:'Quick dinner after Top of the Rock.',author:'Example',status:'approved',likes:2},
   {day:'2026-12-30',cat:'activity',end:'17:30',title:'Top of the Rock at sunset',site:'rockefellercenter.com',url:'https://www.rockefellercenter.com/',cost:40,price:'$40 pp',time:'16:00',note:'Sunset is around 16:35 in late December.',author:'Example',status:'approved',likes:3},
   {day:'2026-12-31',title:'Watch the ball drop near Times Square',site:'example',price:'Free',time:'21:00',note:'Or a quieter rooftop party. Let’s discuss.',author:'Example',status:'suggested',likes:1},
@@ -597,17 +628,19 @@ const SAMPLE = [
 ].map((x,i)=>({id:'ex'+i, example:true, createdAt:i, ...x}));
 
 function demoStore(){
-  let items = ls.get('trip-demo-items-v3', null) || SAMPLE;
+  let items = ls.get('trip-demo-items-v4', null) || SAMPLE;
   let user = ls.get('trip-demo-admin', false) ? {email:'demo admin'} : null;
   const subs = new Set(), userSubs = new Set(), cSubs = new Map(); let mSub = () => {};
-  const save = () => { ls.set('trip-demo-items-v3', items); subs.forEach(f=>f(items)); };
+  const save = () => { ls.set('trip-demo-items-v4', items); subs.forEach(f=>f(items)); };
   return {
     mode:'demo',
     subscribe(f){ subs.add(f); f(items); },
-    async add(it){ items = [...items, {...it, id:'l'+Date.now(), likes:0, status:'suggested', createdAt:Date.now()}]; save(); },
+    async add(it){ items = [...items, {...it, id:'l'+Date.now(), likes:0, votes:{}, status:'suggested', createdAt:Date.now()}]; save(); },
     async update(id,p){ items = items.map(x=>x.id===id?{...x,...p}:x); save(); },
     async remove(id){ items = items.filter(x=>x.id!==id); save(); },
-    async like(id,d){ items = items.map(x=>x.id===id?{...x,likes:Math.max(0,(x.likes||0)+d)}:x); save(); },
+    async vote(id, v){ items = items.map(x => { if (x.id !== id) return x; const votes = {...(x.votes||{})}; if (v) votes.me = v; else delete votes.me; return {...x, votes}; }); save(); },
+    async getProfile(){ return ls.get('trip-demo-profile', null); },
+    async saveProfile(pr){ ls.set('trip-demo-profile', pr); },
     onUser(f){ userSubs.add(f); f(user); },
     async signIn(){ user={email:'demo admin'}; ls.set('trip-demo-admin',true); userSubs.forEach(f=>f(user)); },
     async signOut(){ user=null; ls.set('trip-demo-admin',false); userSubs.forEach(f=>f(user)); },
@@ -640,10 +673,12 @@ async function firebaseStore(conf){
     mode:'live',
     needsLogin: true,
     subscribe(f){ F.onSnapshot(col, s => f(s.docs.map(d=>({id:d.id, ...d.data(), createdAt:d.data().createdAt?.toMillis?.() ?? Date.now()}))), e => showNotice('Could not load suggestions. Check your internet connection and reload the page.', true)); },
-    add(it){ return F.addDoc(col, {...it, likes:0, comments:0, status:'suggested', createdAt:F.serverTimestamp()}); },
+    add(it){ return F.addDoc(col, {...it, likes:0, comments:0, votes:{}, status:'suggested', createdAt:F.serverTimestamp()}); },
     update(id,p){ return F.updateDoc(F.doc(db,'items',id), p); },
     remove(id){ return F.deleteDoc(F.doc(db,'items',id)); },
-    like(id,d){ return F.updateDoc(F.doc(db,'items',id), {likes:F.increment(d)}); },
+    vote(id, v){ return F.updateDoc(F.doc(db,'items',id), {['votes.' + auth.currentUser.uid]: v ? v : F.deleteField()}); },
+    async getProfile(){ try { const d = await F.getDoc(F.doc(db, 'profiles', auth.currentUser.uid)); return d.exists() ? d.data() : null; } catch { return null; } },
+    saveProfile(pr){ return F.setDoc(F.doc(db, 'profiles', auth.currentUser.uid), {...pr, email: (auth.currentUser.email||'').toLowerCase(), updatedAt: F.serverTimestamp()}, {merge: true}); },
     onUser(f){ U.onAuthStateChanged(auth, async u => { adminUid = u && hashes.has(await sha((u.email||'').toLowerCase())) ? u.uid : null; f(u); }); },
     async signIn(){
       const prov = new U.GoogleAuthProvider();
@@ -695,9 +730,13 @@ async function firebaseStore(conf){
 let store, items = [], user = null;
 const VIEWS = ['plan','planning','calendar'];
 let view = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'plan';
-let liked = new Set(ls.get('trip-liked', []));
+let profile = null;
+let adminView = ls.get('trip-admin-view', true);
+const myUid = () => store?.mode === 'demo' ? 'me' : user?.uid;
+const myName = () => profile?.name || ls.get('trip-name','') || user?.displayName?.split(' ')[0] || '';
 let editing = null;
-const isAdmin = () => store?.isAdmin(user);
+const realAdmin = () => !!store?.isAdmin(user);
+const isAdmin = () => realAdmin() && adminView;
 
 function showNotice(html, error){ const n=$('#notice'); n.innerHTML=html; n.hidden=false; if (error) n.dataset.error='1'; }
 
@@ -725,6 +764,10 @@ function whereCell(d){
   const sub = d.extra || c.sub;
   return `<div class="where"><div class="city ${c.cls}"><i aria-hidden="true">${c.cls==='fl'?'O':c.cls==='ny'?'N':'✈'}</i><div>${esc(c.name)}${sub?`<small>${esc(sub)}</small>`:''}</div></div>${tix}</div>`;
 }
+function voteBtns(it){
+  const t = tally(it), mine = (it.votes||{})[myUid()] || 0, id = esc(it.id);
+  return `<span class="vote"><button data-act="vote" data-v="1" data-id="${id}" aria-pressed="${mine===1}" aria-label="Thumbs up" title="I like it">${ICON_UP}${t.up}</button><button data-act="vote" data-v="-1" data-id="${id}" aria-pressed="${mine===-1}" aria-label="Thumbs down" title="Not for me">${ICON_DOWN}${t.down}</button></span>`;
+}
 function card(it){
   const url = safeUrl(it.url), site = it.site && it.site!=='example' ? it.site : host(url);
   const appr = it.status==='approved';
@@ -741,7 +784,7 @@ function card(it){
       ${(it.time||priceLabel(it))?`<div class="meta">${it.time?`<span class="chip">${esc(range(it))}</span>`:''}${priceLabel(it)?`<span class="chip">${esc(priceLabel(it))}</span>`:''}</div>`:''}
       ${it.note?`<p class="note">${esc(it.note)}</p>`:''}
       <div class="foot"><span>by ${esc(it.author||'someone')}</span>
-        <span class="r"><button class="cbtn" data-act="comments" data-id="${esc(it.id)}" aria-label="Comments">${ICON_CM} ${it.comments||0}</button><button class="like" data-act="like" data-id="${esc(it.id)}" aria-pressed="${liked.has(it.id)}" aria-label="Like">♥ ${it.likes||0}</button></span></div>
+        <span class="r"><button class="cbtn" data-act="comments" data-id="${esc(it.id)}" aria-label="Comments">${ICON_CM} ${it.comments||0}</button>${voteBtns(it)}</span></div>
       ${admin?`<div class="adm">${admin}</div>`:''}
     </div></article>`;
 }
@@ -796,7 +839,7 @@ function renderCalendar(){
       const tm = `${fromMin(ev.s)}–${ev.e>=H1?'24:00':fromMin(ev.e)}`;
       if (ev.kind === 'flight') return `<div class="ev flight${short?' short':''}" style="${style}" title="${esc(ev.title)}"><b>✈ ${esc(ev.title)}</b><span class="t">${esc(ev.sub)}</span></div>`;
       const it = ev.it, url = safeUrl(it.url);
-      if (ev.kind === 'ghost') return `<div class="ev ghost${short?' short':''}" style="${style}" title="Pending: ${esc(it.title)}"><b>${esc(it.title)}</b><span class="t">${tm} · ♥ ${it.likes||0}</span>${h>=62?`<button class="btn sm ok" data-act="approve" data-id="${esc(it.id)}">Approve</button>`:''}</div>`;
+      if (ev.kind === 'ghost') return `<div class="ev ghost${short?' short':''}" style="${style}" title="Pending: ${esc(it.title)}"><b>${esc(it.title)}</b><span class="t">${tm} · 👍 ${tally(it).up} 👎 ${tally(it).down}</span>${h>=62?`<button class="btn sm ok" data-act="approve" data-id="${esc(it.id)}">Approve</button>`:''}</div>`;
       const tag = url ? `a href="${esc(url)}" target="_blank" rel="noopener"` : 'div';
       return `<${tag} class="ev ${ev.kind}${short?' short':''}" style="${style}" title="${esc(it.title)} · ${tm}"><b>${esc(it.title)}</b><span class="t">${tm}${it.price?` · ${esc(it.price)}`:''}</span></${url?'a':'div'}>`;
     }).join('');
@@ -837,7 +880,7 @@ function render(){
   const head = `<div class="head"><div>Day</div><div>Where &amp; fixed</div><div>${view==='planning'?'Suggestions':'Plan for the day'}</div></div>`;
   if (view === 'calendar') { renderCalendar(); renderCount(); return; }
   const rows = DAYS.map(d=>{
-    const mine = items.filter(i=>i.day===d.date).sort((a,b)=> view==='planning' ? (b.likes||0)-(a.likes||0) || toMin(a.time)-toMin(b.time) : toMin(a.time)-toMin(b.time));
+    const mine = items.filter(i=>i.day===d.date).sort((a,b)=> view==='planning' ? tally(b).score - tally(a).score || toMin(a.time)-toMin(b.time) : toMin(a.time)-toMin(b.time));
     const content = view==='planning'
       ? `<div class="groups">${Object.entries(CATS).map(([k,c]) => { const g = mine.filter(i=>catOf(i)===k);
           return `<section class="grp"><h5><span class="ico ${k}">${c.icon}</span>${c.name}<span class="n">${g.length}</span></h5><div class="cards">${g.map(card).join('')}<button class="add${g.length?'':' slim'}" data-act="add" data-day="${d.date}" data-cat="${k}"><span class="plus">+</span>Suggest ${k==='gastro'?'a place to eat':'an activity'}</button></div></section>`; }).join('')}</div>`
@@ -853,12 +896,15 @@ function render(){
   renderCount();
 }
 function renderUser(){
-  const name = ls.get('trip-name','');
-  $('#who').textContent = isAdmin() ? 'Admin' : (user && name ? `Hi, ${name}` : (name && !store?.needsLogin ? `Hi, ${name}` : ''));
-  $('#admin-btn').textContent = user ? 'Sign out' : (store?.needsLogin ? 'Sign in' : 'Admin sign in');
-  $('#admin-btn').hidden = !!store?.needsLogin && !user;
+  const name = myName(), signedIn = !!user;
+  const live = !!store?.needsLogin;
+  $('#who').textContent = '';
+  $('#admin-btn').hidden = live ? true : signedIn;   // demo: simple admin toggle
+  $('#admin-btn').textContent = 'Admin sign in';
+  const me = $('#me-btn'); me.hidden = !signedIn;
+  if (signedIn) me.innerHTML = `<span class="av" style="background:${avColor(name||'?')}">${esc(initials(name||user?.email))}</span><span>${esc(name || 'You')}</span>${isAdmin()?'<span class="mode">Admin</span>':''}`;
   $('#members-btn').hidden = !isAdmin();
-  if (isAdmin() && store?.mode === 'demo' && !membersOn) { membersOn = true; store.listenMembers((m, r) => { members = m; requests = r; drawMembers(); }); }
+  if (realAdmin() && !membersOn) { membersOn = true; store.listenMembers((m, r) => { members = m; requests = r; drawMembers(); }); }
 }
 
 /* ---------- modals: lock the page behind, close on Esc / outside tap ---------- */
@@ -906,7 +952,7 @@ function openDialog(day, it, cat){
   $('#f-cat-' + (it ? catOf(it) : (cat || 'activity'))).checked = true; syncCat();
   const c0 = it ? costOf(it) : null; $('#f-cost').value = c0 == null ? '' : c0;
   $('#f-note').value = it?.note || '';
-  $('#f-name').value = it?.author || ls.get('trip-name','');
+  $('#f-name').value = it?.author || myName();
   $('#f-status').textContent = ''; $('#f-status').className = 'status';
   $('#f-save').disabled = false;
   drawPreview();
@@ -995,10 +1041,11 @@ $('#ledger').addEventListener('click', async e => {
       case 'edit': openDialog(null, it); break;
       case 'approve': await store.update(id,{status:'approved'}); toast('Approved. It is now in the plan'); break;
       case 'unapprove': await store.update(id,{status:'suggested'}); toast('Moved back to suggestions'); break;
-      case 'like': {
-        const on = !liked.has(id); on?liked.add(id):liked.delete(id); ls.set('trip-liked',[...liked]);
-        b.setAttribute('aria-pressed', on); b.textContent = '♥ ' + Math.max(0, (it?.likes||0) + (on?1:-1));
-        try { await store.like(id, on?1:-1); } catch (e) { on?liked.delete(id):liked.add(id); ls.set('trip-liked',[...liked]); render(); throw e; }
+      case 'vote': {
+        const v = +b.dataset.v, cur = (it?.votes||{})[myUid()] || 0, next = cur === v ? 0 : v;
+        const votes = {...(it.votes||{})}; if (next) votes[myUid()] = next; else delete votes[myUid()];
+        it.votes = votes; b.closest('.vote').outerHTML = voteBtns(it);
+        try { await store.vote(id, next); } catch (e) { render(); throw e; }
         break; }
       case 'comments': openComments(it); break;
       case 'ics': download('orlando-new-york.ics', 'text/calendar;charset=utf-8', buildICS()); break;
@@ -1039,7 +1086,7 @@ $('#clist').addEventListener('click', async e => { const b = e.target.closest('[
 $('#cform').addEventListener('submit', async e => {
   e.preventDefault();
   const text = $('#c-text').value.trim().slice(0,500); if (!text) return;
-  const author = (ls.get('trip-name','') || user?.displayName?.split(' ')[0] || 'Someone').slice(0,40);
+  const author = (myName() || 'Someone').slice(0,40);
   const b = $('#c-send'); b.disabled = true; b.textContent = 'Posting…';
   try { await store.addComment(cItem.id, {text, author}); $('#c-text').value = ''; }
   catch { toast('Couldn’t post. Check your connection and try again.'); }
@@ -1154,11 +1201,13 @@ function gate(state){
 let accessTimer = null;
 async function onAuth(u){
   user = u; renderUser();
-  if (!store.needsLogin) { if (!started) { started = true; gate('ok'); store.subscribe(list => { items = list; render(); }); } render(); return; }
+  if (!store.needsLogin) { profile = await store.getProfile(); if (!started) { started = true; gate('ok'); store.subscribe(list => { items = list; render(); }); } render(); return; }
   clearInterval(accessTimer);
   const a = await store.checkAccess(u);
   if (a === 'admin' || a === 'member') {
     if (u && !ls.get('trip-name','') && u.displayName) ls.set('trip-name', u.displayName.split(' ')[0]);
+    profile = await store.getProfile();
+    if (!profile && u) { profile = {name: myName() || (u.displayName||'').split(' ')[0] || '', morningEmail: true}; store.saveProfile(profile).catch(()=>{}); }
     gate('ok'); renderUser();
     if (!started) { started = true; store.subscribe(list => { items = list; render(); }); }
     if (a === 'admin' && !membersOn) { membersOn = true; store.listenMembers((m, r) => { members = m; requests = r; drawMembers(); }); }
@@ -1170,6 +1219,24 @@ async function onAuth(u){
     accessTimer = setInterval(async () => { if (await store.checkAccess(u) !== 'none') { clearInterval(accessTimer); location.reload(); } }, 30000);
   }
 }
+
+/* ---------- me panel ---------- */
+const medlg = $('#medlg');
+$('#me-btn').onclick = () => {
+  $('#me-name').value = myName(); $('#me-email').textContent = store.mode === 'demo' ? 'Demo mode' : `Signed in as ${user?.email||''}`;
+  $('#me-mail').checked = profile?.morningEmail !== false;
+  $('#me-admin-row').hidden = !realAdmin(); $('#me-admin').checked = adminView;
+  $('#me-status').textContent = ''; openModal(medlg);
+};
+$('#me-admin').onchange = () => { adminView = $('#me-admin').checked; ls.set('trip-admin-view', adminView); renderUser(); render(); };
+$('#me-out').onclick = async () => { medlg.close(); await store.signOut(); };
+$('#meform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = $('#me-name').value.trim().slice(0,40); if (!name) return;
+  const pr = {name, morningEmail: $('#me-mail').checked};
+  try { await store.saveProfile(pr); profile = {...profile, ...pr}; ls.set('trip-name', name); renderUser(); render(); medlg.close(); toast('Saved'); }
+  catch (err) { console.error(err); $('#me-status').textContent = 'Couldn’t save. ' + fbMsg(err); $('#me-status').className = 'status err'; }
+});
 
 $('#admin-btn').onclick = async () => {
   try { user ? await store.signOut() : await store.signIn(); }
