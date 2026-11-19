@@ -243,6 +243,68 @@ dialog::backdrop{background:rgba(10,12,24,.62);backdrop-filter:blur(4px);-webkit
 .fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
 .fld textarea{min-height:64px;resize:vertical}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:12px}
+.two>*,.three>*,.urlrow>*{min-width:0}
+.dlg{overflow-x:hidden}
+.fld input,.fld select,.fld textarea{max-width:100%}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px;border-radius:7px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted);text-transform:none;letter-spacing:0}
+.seg input:checked+label{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:1px}
+/* categories */
+.ico{width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:none;color:#fff}
+.ico svg{width:12px;height:12px}
+.ico.activity{background:var(--ny)} .ico.gastro{background:var(--accent)}
+.groups{display:flex;flex-direction:column;gap:18px}
+.grp h5{margin:0 0 10px;display:flex;align-items:center;gap:8px;font-family:var(--f-deco);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:600}
+.grp h5 .n{font-family:var(--f-mono);font-size:11px;letter-spacing:0;color:var(--muted);background:var(--sunk);border-radius:999px;padding:0 7px}
+.add.slim{min-height:58px;flex-direction:row;gap:8px}
+.add.slim .plus{font-size:24px}
+.cards:has(> .add.slim:only-child){grid-template-columns:minmax(0,1fr)}
+.catpill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+/* calendar */
+.cal-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.activity{background:var(--ny)} .sw.gastro{background:var(--accent)} .sw.flight{background:repeating-linear-gradient(135deg,var(--muted) 0 3px,transparent 3px 6px);border:1px solid var(--muted)} .sw.ghost{border:1.5px dashed var(--brass)}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.toggle input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.navbtns{display:flex;gap:6px}
+.cal{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-left:52px;position:relative}
+.cal-in{display:flex;min-width:max-content}
+.axis{position:sticky;left:0;z-index:4;background:var(--surface);width:52px;flex:none;border-right:1px solid var(--line)}
+.axis .hd{height:70px;border-bottom:1px solid var(--line)}
+.axis .hr{position:absolute;right:8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);transform:translateY(-50%)}
+.col{width:200px;flex:none;border-right:1px solid var(--line);scroll-snap-align:start}
+.col:last-child{border-right:0}
+.col .hd{height:70px;padding:10px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:2px;position:sticky;top:0}
+.col .hd b{font-family:var(--f-display);font-size:22px;font-weight:600;line-height:1}
+.col .hd small{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col.today .hd{background:color-mix(in srgb,var(--brass) 16%,transparent)}
+.col.today .hd b{color:var(--accent)}
+.body{position:relative;background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% var(--hh)}
+.ev{position:absolute;border-radius:7px;padding:5px 7px;font-size:12px;line-height:1.25;overflow:hidden;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px;text-decoration:none;min-height:22px}
+.ev b{font-weight:700;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ev .t{font-family:var(--f-mono);font-size:10.5px;opacity:.85}
+.ev.activity{background:var(--ny)} .ev.gastro{background:var(--accent)}
+.ev.flight{background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--surface) 6px 12px);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.ev.ghost{background:color-mix(in srgb,var(--surface) 70%,transparent);color:var(--ink);border:1.5px dashed var(--brass);box-shadow:none}
+.ev.ghost .btn{margin-top:auto;align-self:flex-start;padding:2px 8px;font-size:11px}
+.ev.short b{-webkit-line-clamp:1}
+.ev.short .t{display:none}
+a.ev:hover{filter:brightness(1.08)}
+.gap{position:absolute;left:6px;right:6px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.gap span{font-size:10.5px;color:var(--ok);background:var(--surface);border:1px solid color-mix(in srgb,var(--ok) 40%,var(--line));border-radius:999px;padding:1px 8px;white-space:nowrap;font-weight:600}
+.gap::before{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:1.5px dotted color-mix(in srgb,var(--ok) 55%,transparent)}
+.gap span{position:relative}
+.now{position:absolute;left:0;right:0;height:2px;background:var(--accent);z-index:3}
+.now::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.anytime{border-top:1px solid var(--line);padding:8px 10px;font-size:12px;display:flex;flex-direction:column;gap:4px;min-height:44px}
+.anytime .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.anytime a,.anytime span.i{color:var(--ink);text-decoration:none;display:flex;gap:6px;align-items:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cal-note{font-size:12.5px;color:var(--muted);margin-top:10px}
 .urlrow{display:flex;gap:8px}
 .urlrow input{flex:1}
 .pv{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg);min-height:80px}
@@ -273,6 +335,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .step .mini{width:56px}
   .step .pr{grid-column:3;text-align:left}
   .two{grid-template-columns:1fr}
+  .three{grid-template-columns:1fr 1fr}
+  .three>.fld:last-child{grid-column:1/-1}
+  .col{width:calc(100vw - 32px - 52px - 2px)}
+  .tabs{width:100%}
+  .tab{flex:1;justify-content:center;padding:7px 8px}
   .pv{grid-template-columns:96px minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){.bulb{animation:none}}
@@ -307,7 +374,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <div class="wrap">
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-planning" aria-selected="true" data-view="planning">Planning <span class="n" id="n-sug">0</span></button>
-      <button class="tab" role="tab" id="tab-plan" aria-selected="false" data-view="plan">Approved plan <span class="n" id="n-app">0</span></button>
+      <button class="tab" role="tab" id="tab-plan" aria-selected="false" data-view="plan">Approved <span class="n" id="n-app">0</span></button>
+      <button class="tab" role="tab" id="tab-cal" aria-selected="false" data-view="calendar">Calendar</button>
     </div>
     <div class="tools">
       <button class="btn ghost" id="jump" hidden>Jump to today</button>
@@ -329,14 +397,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <div class="dlg-head"><h2 id="dlg-title">Suggest something</h2><button type="button" class="x" id="f-x" aria-label="Close">✕</button></div>
     <p class="hint">Paste a link and we will fetch the picture and name. You can fix anything by hand.</p>
     <div class="fld"><label for="f-day">Day</label><select id="f-day"></select></div>
+    <div class="fld" role="radiogroup" aria-label="Category"><span class="fld-l" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)">Category</span>
+      <div class="seg">
+        <input type="radio" name="f-cat" id="f-cat-activity" value="activity" checked><label for="f-cat-activity"><span class="ico activity" data-icon="activity"></span>Activity</label>
+        <input type="radio" name="f-cat" id="f-cat-gastro" value="gastro"><label for="f-cat-gastro"><span class="ico gastro" data-icon="gastro"></span>Gastro</label>
+      </div>
+    </div>
     <div class="fld"><label for="f-url">Link</label>
       <div class="urlrow"><input id="f-url" type="url" placeholder="https://…" inputmode="url"><button type="button" class="btn" id="f-fetch">Fetch</button></div>
       <div class="status" id="f-status"></div>
     </div>
     <div class="pv" id="f-pv" hidden></div>
-    <div class="fld"><label for="f-title">Name of activity</label><input id="f-title" required maxlength="140" placeholder="e.g. Kennedy Space Center"></div>
-    <div class="two">
-      <div class="fld"><label for="f-time">Time</label><input id="f-time" type="time"></div>
+    <div class="fld"><label for="f-title" id="f-title-l">Name of activity</label><input id="f-title" required maxlength="140" placeholder="e.g. Kennedy Space Center"></div>
+    <div class="three">
+      <div class="fld"><label for="f-time">From</label><input id="f-time" type="time"></div>
+      <div class="fld"><label for="f-end">Until</label><input id="f-end" type="time"></div>
       <div class="fld"><label for="f-price">Price</label><input id="f-price" maxlength="40" placeholder="$45 per person"></div>
     </div>
     <div class="fld"><label for="f-note">Note</label><textarea id="f-note" maxlength="400" placeholder="Why it's worth it, tips, booking info…"></textarea></div>
@@ -364,20 +439,27 @@ const FL = {cls:'fl', name:'Orlando, Florida', sub:'Rental car · day trips poss
 const NY = {cls:'ny', name:'New York City', sub:''};
 const DAYS = [
   {date:'2026-12-24', hol:'Christmas Eve', city:{cls:'tr',name:'Vienna → Orlando',sub:'Travel day'},
-    fixed:[{kind:'Flight',codes:'VIE → MCO',label:'Vienna to Orlando',time:'20:45',tlabel:'lands'}]},
+    fixed:[{kind:'Flight',codes:'VIE → MCO',label:'Vienna to Orlando',time:'20:45',tlabel:'lands',cal:['18:45','20:45','Flight lands in Orlando']}]},
   {date:'2026-12-25', hol:'Christmas Day', city:FL},
   {date:'2026-12-26', city:FL},
   {date:'2026-12-27', city:FL},
   {date:'2026-12-28', city:FL, extra:'Last full day in Florida'},
   {date:'2026-12-29', city:{cls:'tr',name:'Orlando → New York',sub:'Travel day'},
-    fixed:[{kind:'Flight',codes:'MCO → NYC',label:'Orlando to New York',time:'12:32',tlabel:'departs',end:'15:14'}]},
+    fixed:[{kind:'Flight',codes:'MCO → NYC',label:'Orlando to New York',time:'12:32',tlabel:'departs',end:'15:14',cal:['12:32','15:14','Flight to New York']}]},
   {date:'2026-12-30', city:NY},
   {date:'2026-12-31', hol:'New Year’s Eve', city:NY},
   {date:'2027-01-01', hol:'New Year’s Day', city:NY},
   {date:'2027-01-02', city:NY},
   {date:'2027-01-03', city:{cls:'ny',name:'New York City',sub:'Last day · fly home tonight'},
-    fixed:[{kind:'Flight',codes:'NYC → VIE',label:'New York to Vienna',time:'23:30',tlabel:'departs'}]},
+    fixed:[{kind:'Flight',codes:'NYC → VIE',label:'New York to Vienna',time:'23:30',tlabel:'departs',cal:['21:30','23:59','At the airport · flight 23:30']}]},
 ];
+const ICON_ACT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 .8l1.5 3.3 3.6.4-2.7 2.4.8 3.6L6 8.7 2.8 10.5l.8-3.6L.9 4.5l3.6-.4z" fill="currentColor"/></svg>';
+const ICON_GAS = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 .8v4.4M1.6.8v3a1.4 1.4 0 0 0 2.8 0v-3M3 5.2v6M9 11.2V.8C7.6 1.6 7 3.4 7 5.4c0 .9.5 1.4 2 1.4" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>';
+const CATS = {activity:{name:'Activities', one:'activity', icon:ICON_ACT, dur:120}, gastro:{name:'Gastro', one:'gastro', icon:ICON_GAS, dur:90}};
+const catOf = it => it.cat === 'gastro' ? 'gastro' : 'activity';
+const fromMin = m => `${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+const endOf = it => { const st = toMin(it.time); if (st >= 9999) return null; const e = toMin(it.end); return e < 9999 && e > st ? e : Math.min(st + CATS[catOf(it)].dur, 24*60); };
+const range = it => it.time ? (it.end ? `${it.time}–${it.end}` : it.time) : '';
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const parseDay = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
@@ -415,19 +497,20 @@ async function unfurl(url){
 
 /* ---------- data stores ---------- */
 const SAMPLE = [
-  {day:'2026-12-25',title:'Christmas dinner on International Drive',site:'example',price:'~$60 pp',time:'19:00',note:'Book ahead, Christmas Day fills up fast.',author:'Example',status:'suggested',likes:1},
-  {day:'2026-12-26',title:'Kennedy Space Center Visitor Complex',site:'kennedyspacecenter.com',url:'https://www.kennedyspacecenter.com/',price:'$75 pp',time:'09:00',note:'About 1 hour drive east. Full day.',author:'Example',status:'approved',likes:2},
+  {day:'2026-12-25',cat:'gastro',end:'21:00',title:'Christmas dinner on International Drive',site:'example',price:'~$60 pp',time:'19:00',note:'Book ahead, Christmas Day fills up fast.',author:'Example',status:'suggested',likes:1},
+  {day:'2026-12-26',cat:'activity',end:'16:00',title:'Kennedy Space Center Visitor Complex',site:'kennedyspacecenter.com',url:'https://www.kennedyspacecenter.com/',price:'$75 pp',time:'09:00',note:'About 1 hour drive east. Full day.',author:'Example',status:'approved',likes:2},
   {day:'2026-12-27',title:'Day trip to St. Augustine',site:'example',price:'Gas only',time:'08:30',note:'Oldest city in the US, 2 hours north.',author:'Example',status:'suggested',likes:0},
-  {day:'2026-12-30',title:'Top of the Rock at sunset',site:'rockefellercenter.com',url:'https://www.rockefellercenter.com/',price:'$40 pp',time:'16:00',note:'Sunset is around 16:35 in late December.',author:'Example',status:'approved',likes:3},
+  {day:'2026-12-30',cat:'gastro',time:'18:30',end:'20:00',title:'Pizza at a classic slice shop',site:'example',price:'~$15 pp',note:'Quick dinner after Top of the Rock.',author:'Example',status:'approved',likes:2},
+  {day:'2026-12-30',cat:'activity',end:'17:30',title:'Top of the Rock at sunset',site:'rockefellercenter.com',url:'https://www.rockefellercenter.com/',price:'$40 pp',time:'16:00',note:'Sunset is around 16:35 in late December.',author:'Example',status:'approved',likes:3},
   {day:'2026-12-31',title:'Watch the ball drop near Times Square',site:'example',price:'Free',time:'21:00',note:'Or a quieter rooftop party. Let’s discuss.',author:'Example',status:'suggested',likes:1},
   {day:'2027-01-01',title:'Ice skating in Central Park',site:'example',price:'$35 pp',time:'13:00',note:'',author:'Example',status:'suggested',likes:0},
 ].map((x,i)=>({id:'ex'+i, example:true, createdAt:i, ...x}));
 
 function demoStore(){
-  let items = ls.get('trip-demo-items', null) || SAMPLE;
+  let items = ls.get('trip-demo-items-v2', null) || SAMPLE;
   let user = ls.get('trip-demo-admin', false) ? {email:'demo admin'} : null;
   const subs = new Set(), userSubs = new Set();
-  const save = () => { ls.set('trip-demo-items', items); subs.forEach(f=>f(items)); };
+  const save = () => { ls.set('trip-demo-items-v2', items); subs.forEach(f=>f(items)); };
   return {
     mode:'demo',
     subscribe(f){ subs.add(f); f(items); },
@@ -470,7 +553,8 @@ async function firebaseStore(conf){
 
 /* ---------- state ---------- */
 let store, items = [], user = null;
-let view = ['planning','plan'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'planning';
+const VIEWS = ['planning','plan','calendar'];
+let view = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'planning';
 let liked = new Set(ls.get('trip-liked', []));
 let editing = null;
 const isAdmin = () => store?.isAdmin(user);
@@ -514,7 +598,7 @@ function card(it){
     <div class="body">
       ${site?`<div class="site">${esc(site)}</div>`:''}
       <h3>${title}</h3>
-      ${(it.time||it.price)?`<div class="meta">${it.time?`<span class="chip">${esc(it.time)}</span>`:''}${it.price?`<span class="chip">${esc(it.price)}</span>`:''}</div>`:''}
+      ${(it.time||it.price)?`<div class="meta">${it.time?`<span class="chip">${esc(range(it))}</span>`:''}${it.price?`<span class="chip">${esc(it.price)}</span>`:''}</div>`:''}
       ${it.note?`<p class="note">${esc(it.note)}</p>`:''}
       <div class="foot"><span>by ${esc(it.author||'someone')}</span>
         <button class="like" data-act="like" data-id="${esc(it.id)}" aria-pressed="${liked.has(it.id)}" aria-label="Like">♥ ${it.likes||0}</button></div>
@@ -528,10 +612,78 @@ function planCell(d, list){
   const rows = all.map(it => it.fixed
     ? `<div class="step fixed"><span class="tm">${esc(it.time)}</span><div class="mini">FLIGHT</div><div><h4>${esc(it.title)}</h4><div class="sm">${esc(it.sub)}</div></div><span class="pr"></span></div>`
     : (()=>{ const url=safeUrl(it.url); const t=url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(it.title)}</a>`:esc(it.title);
-      return `<div class="step"><span class="tm${it.time?'':' none'}">${esc(it.time||'any time')}</span><div class="mini">${thumb(it)}</div><div><h4>${t}</h4>${it.note?`<div class="sm">${esc(it.note)}</div>`:''}</div><span class="pr">${esc(it.price||'')}</span></div>`; })()
+      return `<div class="step"><span class="tm${it.time?'':' none'}">${esc(it.time||'any time')}${it.end?`<br><small style="color:var(--muted)">–${esc(it.end)}</small>`:''}</span><div class="mini">${thumb(it)}</div><div><span class="catpill"><span class="ico ${catOf(it)}" style="width:16px;height:16px">${CATS[catOf(it)].icon}</span>${catOf(it)==='gastro'?'Gastro':'Activity'}</span><h4>${t}</h4>${it.note?`<div class="sm">${esc(it.note)}</div>`:''}</div><span class="pr">${esc(it.price||'')}</span></div>`; })()
   ).join('');
   const extra = list.length ? '' : `<div class="empty" style="font-size:16px;padding-top:10px">No activities approved for this day yet.</div>`;
   return `<div class="plan">${rows}</div>${extra}`;
+}
+/* ---------- calendar ---------- */
+let showGhosts = ls.get('trip-ghosts', true);
+const H0 = 7*60, H1 = 24*60, HH = 46; // 07:00–24:00, px per hour
+const ypx = m => (Math.max(H0, Math.min(H1, m)) - H0) / 60 * HH;
+const dur = m => { const h = Math.floor(m/60), r = m%60; return h ? (r ? `${h}h ${r}m` : `${h}h`) : `${r}m`; };
+function lanes(evs){
+  evs.sort((a,b)=>a.s-b.s || b.e-a.e);
+  let cluster = [], end = -1;
+  const flush = () => { const n = Math.max(1, ...cluster.map(e=>e.lane+1)); cluster.forEach(e=>e.n=n); cluster = []; };
+  for (const ev of evs) {
+    if (ev.s >= end) { flush(); end = -1; }
+    const used = new Set(cluster.filter(c=>c.e>ev.s).map(c=>c.lane));
+    let l = 0; while (used.has(l)) l++;
+    ev.lane = l; cluster.push(ev); end = Math.max(end, ev.e);
+  }
+  flush(); return evs;
+}
+function renderCalendar(){
+  const admin = isAdmin(), today = localKey();
+  const nowM = new Date().getHours()*60 + new Date().getMinutes();
+  const hours = []; for (let h = H0/60; h <= H1/60; h++) hours.push(`<span class="hr" style="top:${(h*60-H0)/60*HH}px">${h===24?'24':String(h).padStart(2,'0')}:00</span>`);
+  const cols = DAYS.map(d => {
+    const dt = parseDay(d.date);
+    const mine = items.filter(i=>i.day===d.date);
+    const appr = mine.filter(i=>i.status==='approved');
+    const evs = [
+      ...(d.fixed||[]).filter(f=>f.cal).map(f=>({kind:'flight', s:toMin(f.cal[0]), e:Math.min(toMin(f.cal[1]),H1), title:f.cal[2], sub:`${f.codes}${f.end?` · ${f.time}–${f.end}`:` · ${f.time}`}`})),
+      ...appr.filter(i=>toMin(i.time)<9999).map(i=>({kind:catOf(i), it:i, s:toMin(i.time), e:endOf(i)})),
+      ...(admin && showGhosts ? mine.filter(i=>i.status!=='approved' && toMin(i.time)<9999).map(i=>({kind:'ghost', it:i, s:toMin(i.time), e:endOf(i)})) : [])
+    ];
+    lanes(evs);
+    const blocks = evs.map(ev => {
+      const top = ypx(ev.s), h = Math.max(ypx(ev.e) - top, 22), short = h < 40;
+      const w = 100/ev.n, left = ev.lane*w;
+      const style = `top:${top}px;height:${h}px;left:calc(${left}% + 4px);width:calc(${w}% - 8px)`;
+      const tm = `${fromMin(ev.s)}–${ev.e>=H1?'24:00':fromMin(ev.e)}`;
+      if (ev.kind === 'flight') return `<div class="ev flight${short?' short':''}" style="${style}" title="${esc(ev.title)}"><b>✈ ${esc(ev.title)}</b><span class="t">${esc(ev.sub)}</span></div>`;
+      const it = ev.it, url = safeUrl(it.url);
+      if (ev.kind === 'ghost') return `<div class="ev ghost${short?' short':''}" style="${style}" title="Pending: ${esc(it.title)}"><b>${esc(it.title)}</b><span class="t">${tm} · ♥ ${it.likes||0}</span>${h>=62?`<button class="btn sm ok" data-act="approve" data-id="${esc(it.id)}">Approve</button>`:''}</div>`;
+      const tag = url ? `a href="${esc(url)}" target="_blank" rel="noopener"` : 'div';
+      return `<${tag} class="ev ${ev.kind}${short?' short':''}" style="${style}" title="${esc(it.title)} · ${tm}"><b>${esc(it.title)}</b><span class="t">${tm}${it.price?` · ${esc(it.price)}`:''}</span></${url?'a':'div'}>`;
+    }).join('');
+    // free time between confirmed events (flights + approved)
+    const solid = evs.filter(e=>e.kind!=='ghost').sort((a,b)=>a.s-b.s);
+    let gaps = '', last = null;
+    for (const e of solid) {
+      if (last !== null && e.s - last >= 30) { const t = ypx(last), b = ypx(e.s); gaps += `<div class="gap" style="top:${t}px;height:${b-t}px"><span>${dur(e.s-last)} free</span></div>`; }
+      last = Math.max(last ?? 0, e.e);
+    }
+    const any = appr.filter(i=>toMin(i.time)>=9999);
+    const nowLine = d.date === today && nowM >= H0 ? `<div class="now" style="top:${ypx(nowM)}px"></div>` : '';
+    return `<div class="col${d.date===today?' today':''}" id="c-${d.date}">
+      <div class="hd"><b>${WD[dt.getDay()]} ${dt.getDate()}</b><small>${esc(d.hol || d.city.name)}</small></div>
+      <div class="body" style="height:${ypx(H1)}px;--hh:${HH}px">${gaps}${blocks}${nowLine}</div>
+      <div class="anytime"><span class="k">Any time</span>${any.length ? any.map(i=>{ const u=safeUrl(i.url); const inner=`<span class="ico ${catOf(i)}" style="width:16px;height:16px">${CATS[catOf(i)].icon}</span>${esc(i.title)}`; return u?`<a href="${esc(u)}" target="_blank" rel="noopener">${inner}</a>`:`<span class="i">${inner}</span>`; }).join('') : '<span style="color:var(--muted)">–</span>'}</div>
+    </div>`;
+  }).join('');
+  $('#ledger').innerHTML = `
+    <div class="cal-tools">
+      <div class="legend"><span><i class="sw activity"></i>Activity</span><span><i class="sw gastro"></i>Gastro</span><span><i class="sw flight"></i>Flight</span>${admin?'<span><i class="sw ghost"></i>Pending suggestion</span>':''}</div>
+      <div class="navbtns">${admin?`<label class="toggle"><input type="checkbox" id="ghosts" ${showGhosts?'checked':''}>Show pending</label>`:''}<button class="btn" data-act="calnav" data-dir="-1" aria-label="Earlier days">←</button><button class="btn" data-act="calnav" data-dir="1" aria-label="Later days">→</button></div>
+    </div>
+    <div class="cal" id="cal"><div class="cal-in"><div class="axis"><div class="hd"></div><div style="position:relative;height:${ypx(H1)}px">${hours.join('')}</div></div>${cols}</div></div>
+    <p class="cal-note">Approved events only${admin?' (plus pending suggestions while “Show pending” is on, only visible to admins)':''}. Events without an end time are shown as ${CATS.activity.dur/60} h for activities and 1 h 30 m for gastro. Green labels show free time between plans.</p>`;
+  const g = $('#ghosts'); if (g) g.onchange = () => { showGhosts = g.checked; ls.set('trip-ghosts', showGhosts); render(); };
+  const cal = $('#cal'), start = document.getElementById('c-'+today) || null;
+  if (start) cal.scrollLeft = start.offsetLeft - 52;
 }
 function render(){
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', String(t.dataset.view===view)));
@@ -539,10 +691,12 @@ function render(){
   $('#n-app').textContent = items.filter(i=>i.status==='approved').length;
   const today = localKey();
   const head = `<div class="head"><div>Day</div><div>Where &amp; fixed</div><div>${view==='planning'?'Suggestions':'Plan for the day'}</div></div>`;
+  if (view === 'calendar') { renderCalendar(); renderCount(); return; }
   const rows = DAYS.map(d=>{
     const mine = items.filter(i=>i.day===d.date).sort((a,b)=> view==='planning' ? (b.likes||0)-(a.likes||0) || toMin(a.time)-toMin(b.time) : toMin(a.time)-toMin(b.time));
     const content = view==='planning'
-      ? `<div class="cards">${mine.map(card).join('')}<button class="add" data-act="add" data-day="${d.date}"><span class="plus">+</span>Suggest something</button></div>`
+      ? `<div class="groups">${Object.entries(CATS).map(([k,c]) => { const g = mine.filter(i=>catOf(i)===k);
+          return `<section class="grp"><h5><span class="ico ${k}">${c.icon}</span>${c.name}<span class="n">${g.length}</span></h5><div class="cards">${g.map(card).join('')}<button class="add${g.length?'':' slim'}" data-act="add" data-day="${d.date}" data-cat="${k}"><span class="plus">+</span>Suggest ${k==='gastro'?'a place to eat':'an activity'}</button></div></section>`; }).join('')}</div>`
       : planCell(d, mine.filter(i=>i.status==='approved'));
     const cls = d.date===today ? ' today' : d.date < today ? ' past' : '';
     return `<div class="row${cls}" id="d-${d.date}"><div class="c">${dateCell(d)}</div><div class="c">${whereCell(d)}</div><div class="c ideas">${content}</div></div>`;
@@ -588,11 +742,11 @@ for (const d of document.querySelectorAll('dialog')) {
 /* ---------- suggestion dialog ---------- */
 const dlg = $('#dlg');
 let snapshot = '';
-const formState = () => ['#f-url','#f-title','#f-time','#f-price','#f-note'].map(s=>$(s).value).join('\u0001');
+const formState = () => ['#f-url','#f-title','#f-time','#f-end','#f-price','#f-note'].map(s=>$(s).value).join('\u0001');
 const isDirty = () => formState() !== snapshot;
 $('#f-day').innerHTML = DAYS.map(d=>{ const dt=parseDay(d.date); return `<option value="${d.date}">${WD[dt.getDay()]} ${dt.getDate()} ${MON[dt.getMonth()]} · ${esc(d.city.name)}</option>`; }).join('');
 let fetched = {};
-function openDialog(day, it){
+function openDialog(day, it, cat){
   editing = it || null;
   fetched = it ? {image:it.image||'', site:it.site||'', description:''} : {};
   $('#dlg-title').textContent = it ? 'Edit card' : 'Suggest something';
@@ -601,6 +755,8 @@ function openDialog(day, it){
   $('#f-url').value = it?.url || '';
   $('#f-title').value = it?.title || '';
   $('#f-time').value = it?.time || '';
+  $('#f-end').value = it?.end || '';
+  $('#f-cat-' + (it ? catOf(it) : (cat || 'activity'))).checked = true; syncCat();
   $('#f-price').value = it?.price || '';
   $('#f-note').value = it?.note || '';
   $('#f-name').value = it?.author || ls.get('trip-name','');
@@ -640,6 +796,19 @@ $('#f-fetch').onclick = doFetch;
 $('#f-url').addEventListener('paste', () => setTimeout(doFetch, 30));
 $('#f-url').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doFetch(); } });
 $('#f-x').onclick = () => dlg.close();
+document.querySelectorAll('[data-icon]').forEach(el => el.innerHTML = CATS[el.dataset.icon].icon);
+const syncCat = () => { const g = document.querySelector('input[name="f-cat"]:checked').value === 'gastro';
+  $('#f-title-l').textContent = g ? 'Name of the place' : 'Name of activity';
+  $('#f-title').placeholder = g ? 'e.g. Rooftop bar for New Year’s Eve' : 'e.g. Kennedy Space Center'; };
+document.querySelectorAll('input[name="f-cat"]').forEach(r => r.addEventListener('change', syncCat));
+// suggest an end time when the start is picked
+$('#f-time').addEventListener('change', () => {
+  const st = toMin($('#f-time').value); if (st >= 9999) return;
+  if (!$('#f-end').value || toMin($('#f-end').value) <= st) {
+    const c = document.querySelector('input[name="f-cat"]:checked').value;
+    $('#f-end').value = fromMin(Math.min(st + CATS[c].dur, 23*60+59));
+  }
+});
 $('#f-title').addEventListener('input', drawPreview);
 $('#f-cancel').onclick = () => dlg.close();
 $('#form').addEventListener('submit', async e => {
@@ -649,7 +818,8 @@ $('#form').addEventListener('submit', async e => {
   const url = safeUrl($('#f-url').value.trim());
   const data = {
     day: $('#f-day').value, url, title: $('#f-title').value.trim().slice(0,140),
-    time: $('#f-time').value, price: $('#f-price').value.trim().slice(0,40),
+    time: $('#f-time').value, end: ($('#f-end').value && toMin($('#f-end').value) > toMin($('#f-time').value)) ? $('#f-end').value : '',
+    cat: document.querySelector('input[name="f-cat"]:checked').value === 'gastro' ? 'gastro' : 'activity', price: $('#f-price').value.trim().slice(0,40),
     note: $('#f-note').value.trim().slice(0,400), author: name.slice(0,40),
     image: safeUrl(fetched.image||'') , site: (fetched.site || host(url) || '').slice(0,80)
   };
@@ -671,7 +841,8 @@ $('#ledger').addEventListener('click', async e => {
   const id = b.dataset.id, it = items.find(x=>x.id===id);
   try {
     switch (b.dataset.act) {
-      case 'add': openDialog(b.dataset.day); break;
+      case 'add': openDialog(b.dataset.day, null, b.dataset.cat); break;
+      case 'calnav': { const c = $('#cal'), col = c.querySelector('.col'); c.scrollBy({left: (+b.dataset.dir) * (col ? col.offsetWidth : 200) * (innerWidth < 820 ? 1 : 3), behavior:'smooth'}); break; }
       case 'edit': openDialog(null, it); break;
       case 'approve': await store.update(id,{status:'approved'}); toast('Approved. It is now in the plan'); break;
       case 'unapprove': await store.update(id,{status:'suggested'}); toast('Moved back to suggestions'); break;
@@ -690,7 +861,7 @@ $('#ledger').addEventListener('click', async e => {
   } catch (err) { toast('That didn’t work: ' + err.message); }
 });
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => { view = t.dataset.view; history.replaceState(null,'','#'+view); render(); });
-addEventListener('hashchange', () => { const h=location.hash.slice(1); if (['planning','plan'].includes(h)) { view=h; render(); } });
+addEventListener('hashchange', () => { const h=location.hash.slice(1); if (VIEWS.includes(h)) { view=h; render(); } });
 $('#jump').onclick = () => document.getElementById('d-'+localKey())?.scrollIntoView({behavior:'smooth', block:'start'});
 $('#admin-btn').onclick = async () => {
   try { user ? await store.signOut() : await store.signIn(); }
