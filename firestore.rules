@@ -20,6 +20,15 @@ service cloud.firestore {
     }
     function onlyChanged(k) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly([k]); }
     function stepOf(k) { return request.resource.data.get(k, 0) - resource.data.get(k, 0); }
+    function okVote() {
+      let after = request.resource.data.votes;
+      let me = request.auth.uid;
+      return after is map
+        && after.diff(resource.data.get('votes', {})).affectedKeys().hasOnly([me])
+        && (!(me in after) || after[me] in [1, -1]);
+    }
+    // Photo ids look like <uid>_<YYYY-MM-DD>_<1..5>, so nobody can post more than 5 a day
+    function okPhotoId(id) { return id.matches(request.auth.uid + '_[0-9]{4}-[0-9]{2}-[0-9]{2}_[1-5]'); }
 
     // ---- Guest list ------------------------------------------------------
     match /members/{email} {
@@ -42,8 +51,9 @@ service cloud.firestore {
         && request.resource.data.status == 'suggested'
         && request.resource.data.likes == 0
         && request.resource.data.get('comments', 0) == 0;
-      // members may only like/unlike or bump the comment counter by 1; admins can change anything
+      // members may only set their own thumbs up/down or bump the comment counter by 1; admins can change anything
       allow update: if isAdmin()
+        || (isMember() && onlyChanged('votes') && okVote())
         || (isMember() && onlyChanged('likes') && stepOf('likes') in [-1, 1])
         || (isMember() && onlyChanged('comments') && stepOf('comments') in [-1, 1]);
       allow delete: if isAdmin();
@@ -57,6 +67,56 @@ service cloud.firestore {
           && request.resource.data.author is string && request.resource.data.author.size() <= 40;
         allow delete: if isAdmin() || (isMember() && resource.data.uid == request.auth.uid);
       }
+    }
+
+    // ---- Profiles (name + morning email switch) -----------------------------
+    match /profiles/{uid} {
+      allow read: if isMember();
+      allow create, update: if isMember() && uid == request.auth.uid
+        && request.resource.data.email == myEmail()
+        && request.resource.data.get('name', '') is string && request.resource.data.get('name', '').size() <= 40
+        && request.resource.data.get('morningEmail', true) is bool;
+      allow delete: if isAdmin();
+    }
+
+    // ---- Money: shared expenses and settle-ups ------------------------------
+    match /expenses/{id} {
+      allow read: if isMember();
+      allow create: if isMember()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.kind in ['expense', 'settle']
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0 && request.resource.data.amount < 100000
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
+        && request.resource.data.paidBy is string && request.resource.data.paidBy.size() <= 40
+        && request.resource.data.split is list && request.resource.data.split.size() > 0 && request.resource.data.split.size() <= 30
+        && request.resource.data.author is string && request.resource.data.author.size() <= 40;
+      allow update: if isAdmin();
+      allow delete: if isAdmin() || (isMember() && resource.data.uid == request.auth.uid);
+    }
+    // Trip settings, such as the list of travellers
+    match /meta/{doc} {
+      allow read: if isMember();
+      allow write: if isAdmin();
+    }
+
+    // ---- Photo wall (small preview + full photo, stored as compressed images) --
+    match /photos/{id} {
+      allow read: if isMember();
+      allow create: if isMember() && okPhotoId(id)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.day == id.split('_')[1]
+        && request.resource.data.thumb is string && request.resource.data.thumb.size() < 150000
+        && request.resource.data.get('caption', '') is string && request.resource.data.get('caption', '').size() <= 140
+        && request.resource.data.author is string && request.resource.data.author.size() <= 40;
+      allow delete: if isAdmin() || (isMember() && resource.data.uid == request.auth.uid);
+    }
+    match /photoFull/{id} {
+      allow read: if isMember();
+      allow create, update: if isMember() && okPhotoId(id)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.data is string && request.resource.data.data.size() < 1000000;
+      allow delete: if isAdmin() || (isMember() && resource.data.uid == request.auth.uid);
     }
   }
 }

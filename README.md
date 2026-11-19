@@ -37,6 +37,20 @@ Share the link. The plan is private: people sign in with Google and only see it 
 under **Members** (or accept their access request there). Members can suggest, like and comment; you approve,
 edit or delete. Approved cards move into the **Approved plan** tab, sorted by time next to the flights.
 
+## 4. Morning email (optional, free)
+
+Every trip morning at 8:00 Orlando/New York time, everyone gets the day's plan by email. Anyone can switch it off on the site (tap your name, then "Morning email").
+
+1. **Firebase key.** Firebase console → gear icon → Project settings → Service accounts → **Generate new private key**. A `.json` file downloads.
+2. **Gmail app password.** Your Google account needs 2-Step Verification on. Then open https://myaccount.google.com/apppasswords, create one called "Trip", and copy the 16 letters.
+3. **GitHub secrets.** In this repo: Settings → Secrets and variables → Actions → **New repository secret**, three times:
+   - `FIREBASE_SERVICE_ACCOUNT`: the whole content of the `.json` file
+   - `GMAIL_USER`: your Gmail address (the email is sent from it)
+   - `GMAIL_APP_PASSWORD`: the 16 letters from step 2
+4. **Test it.** Actions tab → "Morning email" → **Run workflow**. With "Test" ticked, only you get a sample email (it shows 30 December if today is not a trip day).
+
+Never commit the `.json` key file to the repo.
+
 ## Notes
 - Link previews use microlink.io's free tier (about 50 previews a day, no key). If a site blocks it,
   just type the name; a festive placeholder image is used.
