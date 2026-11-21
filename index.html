@@ -775,6 +775,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   </form>
 </dialog>
 
+<dialog id="edlg" class="sm" aria-labelledby="e-title">
+  <form class="dlg" id="eform">
+    <div class="dlg-head"><h2 id="e-title">Edit an approved plan?</h2><button type="button" class="x" data-close aria-label="Close">✕</button></div>
+    <p class="hint" id="e-text"></p>
+    <div class="fld"><label for="e-name">Type <b id="e-want" style="text-transform:none;letter-spacing:0;color:var(--ink)"></b> to continue</label><input id="e-name" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+    <div class="row-b"><button type="button" class="btn ghost" data-close>Cancel</button><button type="submit" class="btn primary" id="e-go" disabled>Edit it</button></div>
+  </form>
+</dialog>
+
 <dialog id="confirm" class="sm" aria-labelledby="confirm-title">
   <form class="dlg" method="dialog">
     <h2 id="confirm-title">Delete this card?</h2>
@@ -1645,7 +1654,7 @@ $('#ledger').addEventListener('click', async e => {
     switch (b.dataset.act) {
       case 'add': openDialog(b.dataset.day, null, b.dataset.cat); break;
       case 'calnav': { const c = $('#cal'), col = c.querySelector('.col'); c.scrollBy({left: (+b.dataset.dir) * (col ? col.offsetWidth : 200) * (innerWidth < 820 ? 1 : 3), behavior:'smooth'}); break; }
-      case 'edit': openDialog(null, it); break;
+      case 'edit': requestEdit(it); break;
       case 'detail': e.preventDefault(); openDetail(it); break;
       case 'approve': await store.update(id,{status:'approved'}); toast('Approved. It is now in the plan'); break;
       case 'unapprove': await store.update(id,{status:'suggested'}); toast('Moved back to suggestions'); break;
@@ -1681,6 +1690,25 @@ $('#ledger').addEventListener('click', async e => {
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => { view = t.dataset.view; history.replaceState(null,'','#'+view); render(); t.scrollIntoView({block:'nearest', inline:'nearest'}); });
 addEventListener('hashchange', () => { const h=location.hash.slice(1); if (VIEWS.includes(h)) { view=h; render(); } });
 $('#jump').onclick = () => document.getElementById('d-'+localKey())?.scrollIntoView({behavior:'smooth', block:'start'});
+/* ---------- edit an approved plan: type your name to confirm (admins skip this) ---------- */
+const edlg = $('#edlg'); let eItem = null;
+const norm = v => String(v||'').trim().toLowerCase();
+function requestEdit(it){
+  if (!it) return;
+  if (it.status !== 'approved' || isAdmin()) { openDialog(null, it); return; }
+  eItem = it;
+  const want = (it.author || myName() || 'edit').trim();
+  $('#e-text').textContent = `“${it.title}” is already in the plan, so everyone is counting on it. Changes show up for everyone right away.`;
+  $('#e-want').textContent = want; $('#e-name').placeholder = want; $('#e-name').value = ''; $('#e-go').disabled = true;
+  openModal(edlg);
+  setTimeout(() => $('#e-name').focus(), 50);
+}
+$('#e-name').addEventListener('input', () => { $('#e-go').disabled = norm($('#e-name').value) !== norm($('#e-want').textContent); });
+$('#eform').addEventListener('submit', e => {
+  e.preventDefault(); if ($('#e-go').disabled) return;
+  const it = eItem; edlg.close(); setTimeout(() => openDialog(null, it), 0);
+});
+
 /* ---------- activity details ---------- */
 const idlg = $('#idlg'); let iItem = null;
 function openDetail(it){
@@ -1710,7 +1738,7 @@ function openDetail(it){
 $('#i-acts').addEventListener('click', e => {
   const b = e.target.closest('[data-iact]'); if (!b) return;
   const it = iItem; idlg.close();
-  setTimeout(() => b.dataset.iact === 'edit' ? openDialog(null, it) : openComments(it), 0);
+  setTimeout(() => b.dataset.iact === 'edit' ? requestEdit(it) : openComments(it), 0);
 });
 
 /* ---------- comments ---------- */
