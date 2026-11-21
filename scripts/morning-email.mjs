@@ -53,7 +53,7 @@ const photosYesterday = prevKey ? (await db.collection('photos').where('day', '=
 
 const rows = [
   ...(day.fixed || []).map(([time, title]) => ({time, title, flight: true})),
-  ...items.map(i => ({time: i.time || '', end: i.end || '', title: i.title, url: safeUrl(i.url), note: i.note, cat: i.cat, cost: costOf(i)})),
+  ...items.map(i => ({time: i.time || '', end: i.end || '', title: i.title, url: safeUrl(i.url), note: i.note, addr: i.addr || '', cat: i.cat, cost: costOf(i)})),
 ].sort((a, b) => toMin(a.time) - toMin(b.time));
 const total = rows.reduce((a, r) => a + (r.cost || 0), 0);
 
@@ -75,6 +75,7 @@ const row = r => `
     <td style="padding:12px 0;vertical-align:top;border-bottom:1px solid #eadfcd">
       <div style="font:600 15px/1.35 Arial,sans-serif;color:#1d1b2a">${r.flight ? '✈︎ ' : r.cat === 'gastro' ? '🍽 ' : ''}${r.url ? `<a href="${esc(r.url)}" style="color:#1d1b2a">${esc(r.title)}</a>` : esc(r.title)}</div>
       ${r.note ? `<div style="font:13px/1.45 Arial,sans-serif;color:#6b6257;margin-top:3px">${esc(r.note)}</div>` : ''}
+      ${r.addr ? `<div style="font:13px/1.45 Arial,sans-serif;margin-top:3px">📍 <a href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(r.addr)}" style="color:#a3313f">${esc(r.addr)}</a></div>` : ''}
       ${r.cost != null ? `<div style="font:12px Arial,sans-serif;color:#8a7f72;margin-top:4px">${money(r.cost)}${r.cost ? ' per person' : ''}</div>` : ''}
     </td>
   </tr>`;

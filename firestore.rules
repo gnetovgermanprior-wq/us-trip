@@ -17,6 +17,7 @@ service cloud.firestore {
         && d.day is string && d.author is string && d.author.size() <= 40
         && d.note is string && d.note.size() <= 400
         && d.price is string && d.price.size() <= 40
+        && (!('addr' in d) || (d.addr is string && d.addr.size() <= 200))
         // optional own picture, stored as a small compressed image
         && (!('pic' in d) || (d.pic is string && d.pic.size() < 100000
             && (d.pic == '' || d.pic.matches('data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+'))));
@@ -62,7 +63,7 @@ service cloud.firestore {
         || (isMember() && resource.data.get('uid', '') == request.auth.uid
             && request.resource.data.uid == request.auth.uid && okItem(request.resource.data)
             && request.resource.data.diff(resource.data).affectedKeys()
-                 .hasOnly(['day', 'url', 'title', 'time', 'end', 'cat', 'cost', 'note', 'author', 'image', 'site', 'price', 'pic']))
+                 .hasOnly(['day', 'url', 'title', 'time', 'end', 'cat', 'cost', 'note', 'author', 'image', 'site', 'price', 'pic', 'addr']))
         || (isMember() && onlyChanged('likes') && stepOf('likes') in [-1, 1])
         || (isMember() && onlyChanged('comments') && stepOf('comments') in [-1, 1]);
       allow delete: if isAdmin()
