@@ -94,6 +94,20 @@ service cloud.firestore {
       allow update: if isAdmin();
       allow delete: if isAdmin() || (isMember() && resource.data.uid == request.auth.uid);
     }
+    // Cost center: trip costs the admin adds (hotels, car, flights...)
+    match /costs/{id} {
+      allow read: if isMember();
+      allow create, update: if isAdmin()
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
+        && request.resource.data.amount is number && request.resource.data.amount > 0 && request.resource.data.amount < 1000000
+        && request.resource.data.cur in ['USD', 'EUR']
+        && request.resource.data.per in ['group', 'person']
+        && request.resource.data.cat in ['flight', 'stay', 'transport', 'activity', 'food', 'other']
+        && request.resource.data.days is int && request.resource.data.days >= 1 && request.resource.data.days <= 11
+        && request.resource.data.paid is bool
+        && request.resource.data.get('note', '') is string && request.resource.data.get('note', '').size() <= 200;
+      allow delete: if isAdmin();
+    }
     // Trip settings, such as the list of travellers
     match /meta/{doc} {
       allow read: if isMember();
