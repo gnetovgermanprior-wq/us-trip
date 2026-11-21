@@ -1061,6 +1061,8 @@ function voteBtns(it){
   const t = tally(it), mine = (it.votes||{})[myUid()] || 0, id = esc(it.id);
   return `<span class="vote"><button data-act="vote" data-v="1" data-id="${id}" aria-pressed="${mine===1}" aria-label="Thumbs up" title="I like it">${ICON_UP}${t.up}</button><button data-act="vote" data-v="-1" data-id="${id}" aria-pressed="${mine===-1}" aria-label="Thumbs down" title="Not for me">${ICON_DOWN}${t.down}</button></span>`;
 }
+// Your own suggestion. Cards from before Nov 21 have no owner saved, so they count as the admin's.
+const isMine = it => it.uid ? it.uid === myUid() : realAdmin();
 function card(it){
   const url = safeUrl(it.url), site = it.site && it.site!=='example' ? it.site : host(url);
   const appr = it.status==='approved';
@@ -1069,7 +1071,7 @@ function card(it){
       ${appr ? `<button class="btn sm" data-act="unapprove" data-id="${esc(it.id)}">Unapprove</button>` : `<button class="btn sm ok" data-act="approve" data-id="${esc(it.id)}">Approve</button>`}
       <button class="btn sm ghost" data-act="edit" data-id="${esc(it.id)}">Edit</button>
       <button class="btn sm ghost" data-act="del" data-id="${esc(it.id)}" aria-label="Delete">✕</button>`
-    : (it.uid && it.uid === myUid()) ? `
+    : isMine(it) ? `
       <button class="btn sm ghost" data-act="edit" data-id="${esc(it.id)}">Edit</button>
       ${appr ? '' : `<button class="btn sm ghost" data-act="del" data-id="${esc(it.id)}" aria-label="Delete">✕</button>`}` : '';
   return `<article class="card${appr?' appr':''}">
@@ -1716,7 +1718,7 @@ function openDetail(it){
   iItem = it;
   const url = safeUrl(it.url), site = it.site && it.site !== 'example' ? it.site : host(url), t = tally(it);
   const appr = it.status === 'approved', cat = catOf(it), c = costOf(it);
-  const canEdit = isAdmin() || (it.uid && it.uid === myUid());
+  const canEdit = isAdmin() || isMine(it);
   $('#i-hero').innerHTML = `<div class="thumb">${thumb(it)}</div>`;
   $('#i-kicker').innerHTML = `<span class="ico ${cat}" style="width:18px;height:18px">${CATS[cat].icon}</span>${cat === 'gastro' ? 'Gastro' : 'Activity'} · ${appr ? 'In the plan' : 'Suggestion'}`;
   $('#i-title').textContent = it.title;
