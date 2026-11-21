@@ -162,7 +162,7 @@ h1 em{font-style:italic;font-weight:500}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);min-width:0}
 .card.appr{border-color:color-mix(in srgb,var(--ok) 55%,var(--line))}
 .thumb{aspect-ratio:16/9;max-width:100%;background:var(--sunk);position:relative;display:block;overflow:hidden}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .ph{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-between;padding:10px 12px;color:#fff8ee}
 .ph::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1.5px);background-size:22px 22px;opacity:.25;pointer-events:none}
 .ph b{font-family:var(--f-display);font-size:42px;line-height:1;font-weight:500;font-style:italic;opacity:.95}
@@ -345,6 +345,8 @@ h1 em{font-style:italic;font-weight:500}
 .fld .chips input,.fld .seg input{width:1px;height:1px;padding:0;border:0;left:0;top:0}
 .chips,.seg{position:relative}
 .fld .chips label{font-size:13.5px;letter-spacing:0;text-transform:none;font-weight:600}
+.picrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.vh{position:absolute!important;width:1px!important;height:1px!important;opacity:0;pointer-events:none;overflow:hidden}
 .ppl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .daytotal{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:right}
 .daytotal b{font-family:var(--f-mono);color:var(--ink);font-weight:500}
@@ -609,6 +611,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <div class="status" id="f-status"></div>
     </div>
     <div class="pv" id="f-pv" hidden></div>
+    <div class="fld"><span class="sec-t" style="margin:0">Picture (optional)</span>
+      <div class="picrow"><label class="btn" for="f-pic" id="f-pic-l">📷 Add a picture</label><input id="f-pic" type="file" accept="image/*" class="vh"><button type="button" class="btn ghost" id="f-pic-rm" hidden>Remove</button></div>
+      <p class="hint" style="margin:0">Pick one from your phone. It shows on the card, so everyone sees at a glance what it is.</p></div>
     <div class="fld"><label for="f-title" id="f-title-l">Name of activity</label><input id="f-title" required maxlength="140" placeholder="e.g. Kennedy Space Center"></div>
     <div class="three">
       <div class="fld"><label for="f-time">From</label><input id="f-time" type="time"></div>
@@ -790,8 +795,9 @@ function placeholder(title, site){
   const [a,b] = pals[hue(title||site)%pals.length];
   return `<div class="ph" style="background:radial-gradient(circle at 80% 15%,rgba(255,220,150,.35),transparent 40%),linear-gradient(135deg,${a},${b})"><b>${esc((title||site||'?').trim()[0]?.toUpperCase()||'?')}</b><span>${esc(site||'')}</span></div>`;
 }
+const okPic = p => /^data:image\/(jpeg|png|webp);base64,/.test(p||'') ? p : '';
 function thumb(it, cls='thumb'){
-  const img = safeUrl(it.image);
+  const img = okPic(it.pic) || safeUrl(it.image);
   const ph = placeholder(it.title, (it.site && it.site!=='example') ? it.site : host(it.url));
   return img ? `${ph}<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ph;
 }
@@ -850,7 +856,7 @@ function demoStore(){
   return {
     mode:'demo',
     subscribe(f){ subs.add(f); f(items); },
-    async add(it){ items = [...items, {...it, id:'l'+Date.now(), likes:0, votes:{}, status:'suggested', createdAt:Date.now()}]; save(); },
+    async add(it){ items = [...items, {...it, uid:'me', id:'l'+Date.now(), likes:0, votes:{}, status:'suggested', createdAt:Date.now()}]; save(); },
     async update(id,p){ items = items.map(x=>x.id===id?{...x,...p}:x); save(); },
     async remove(id){ items = items.filter(x=>x.id!==id); save(); },
     async vote(id, v){ items = items.map(x => { if (x.id !== id) return x; const votes = {...(x.votes||{})}; if (v) votes.me = v; else delete votes.me; return {...x, votes}; }); save(); },
@@ -901,7 +907,7 @@ async function firebaseStore(conf){
     mode:'live',
     needsLogin: true,
     subscribe(f){ F.onSnapshot(col, s => f(s.docs.map(d=>({id:d.id, ...d.data(), createdAt:d.data().createdAt?.toMillis?.() ?? Date.now()}))), e => showNotice('Could not load suggestions. Check your internet connection and reload the page.', true)); },
-    add(it){ return F.addDoc(col, {...it, likes:0, comments:0, votes:{}, status:'suggested', createdAt:F.serverTimestamp()}); },
+    add(it){ return F.addDoc(col, {...it, uid: auth.currentUser.uid, likes:0, comments:0, votes:{}, status:'suggested', createdAt:F.serverTimestamp()}); },
     update(id,p){ return F.updateDoc(F.doc(db,'items',id), p); },
     remove(id){ return F.deleteDoc(F.doc(db,'items',id)); },
     vote(id, v){ return F.updateDoc(F.doc(db,'items',id), {['votes.' + auth.currentUser.uid]: v ? v : F.deleteField()}); },
@@ -1019,7 +1025,10 @@ function card(it){
   const admin = isAdmin() ? `
       ${appr ? `<button class="btn sm" data-act="unapprove" data-id="${esc(it.id)}">Unapprove</button>` : `<button class="btn sm ok" data-act="approve" data-id="${esc(it.id)}">Approve</button>`}
       <button class="btn sm ghost" data-act="edit" data-id="${esc(it.id)}">Edit</button>
-      <button class="btn sm ghost" data-act="del" data-id="${esc(it.id)}" aria-label="Delete">✕</button>` : '';
+      <button class="btn sm ghost" data-act="del" data-id="${esc(it.id)}" aria-label="Delete">✕</button>`
+    : (it.uid && it.uid === myUid()) ? `
+      <button class="btn sm ghost" data-act="edit" data-id="${esc(it.id)}">Edit</button>
+      ${appr ? '' : `<button class="btn sm ghost" data-act="del" data-id="${esc(it.id)}" aria-label="Delete">✕</button>`}` : '';
   return `<article class="card${appr?' appr':''}">
     <a class="thumb" ${url?`href="${esc(url)}" target="_blank" rel="noopener"`:''} tabindex="-1">${thumb(it)}${appr?'<span class="badge">Approved</span>':''}${it.example?'<span class="badge ex">Example</span>':''}</a>
     <div class="body">
@@ -1486,7 +1495,8 @@ for (const d of document.querySelectorAll('dialog')) {
 /* ---------- suggestion dialog ---------- */
 const dlg = $('#dlg');
 let snapshot = '';
-const formState = () => ['#f-url','#f-title','#f-time','#f-end','#f-cost','#f-note'].map(s=>$(s).value).join('\u0001');
+let picData = '';
+const formState = () => ['#f-url','#f-title','#f-time','#f-end','#f-cost','#f-note'].map(s=>$(s).value).join('\u0001') + picData.length;
 const isDirty = () => formState() !== snapshot;
 $('#f-day').innerHTML = DAYS.map(d=>{ const dt=parseDay(d.date); return `<option value="${d.date}">${WD[dt.getDay()]} ${dt.getDate()} ${MON[dt.getMonth()]} · ${esc(d.city.name)}</option>`; }).join('');
 let fetched = {};
@@ -1503,6 +1513,7 @@ function openDialog(day, it, cat){
   $('#f-cat-' + (it ? catOf(it) : (cat || 'activity'))).checked = true; syncCat();
   const c0 = it ? costOf(it) : null; $('#f-cost').value = c0 == null ? '' : c0;
   $('#f-note').value = it?.note || '';
+  picData = okPic(it?.pic); $('#f-pic').value = ''; syncPic();
   $('#f-name').value = it?.author || myName();
   $('#f-status').textContent = ''; $('#f-status').className = 'status';
   $('#f-save').disabled = false;
@@ -1511,12 +1522,21 @@ function openDialog(day, it, cat){
   openModal(dlg);
   if (matchMedia('(hover:hover)').matches) (it ? $('#f-title') : $('#f-url')).focus();
 }
+function syncPic(){ $('#f-pic-l').textContent = picData ? '📷 Change picture' : '📷 Add a picture'; $('#f-pic-rm').hidden = !picData; }
+$('#f-pic').addEventListener('change', async () => {
+  const f = $('#f-pic').files[0]; if (!f) return;
+  const st = $('#f-status');
+  try { st.textContent = 'Preparing picture…'; st.className = 'status'; picData = (await shrink(f, 640, 70000)).data; st.textContent = ''; }
+  catch { st.textContent = 'That picture could not be opened. Try another one.'; st.className = 'status err'; }
+  syncPic(); drawPreview();
+});
+$('#f-pic-rm').onclick = () => { picData = ''; $('#f-pic').value = ''; syncPic(); drawPreview(); };
 function drawPreview(){
   const pv = $('#f-pv');
   const t = $('#f-title').value || fetched.title;
-  if (!fetched.image && !fetched.description && !t) { pv.hidden = true; return; }
+  if (!picData && !fetched.image && !fetched.description && !t) { pv.hidden = true; return; }
   pv.hidden = false;
-  pv.innerHTML = `<div class="thumb">${thumb({image:fetched.image,title:t,site:fetched.site||host($('#f-url').value)})}</div><div class="tx"><b>${esc(t||'Untitled')}</b><span>${esc(fetched.description||fetched.site||'')}</span></div>`;
+  pv.innerHTML = `<div class="thumb">${thumb({pic:picData,image:fetched.image,title:t,site:fetched.site||host($('#f-url').value)})}</div><div class="tx"><b>${esc(t||'Untitled')}</b><span>${esc(fetched.description||fetched.site||'')}</span></div>`;
 }
 async function doFetch(){
   const url = safeUrl($('#f-url').value.trim());
@@ -1567,8 +1587,9 @@ $('#form').addEventListener('submit', async e => {
     note: $('#f-note').value.trim().slice(0,400), author: name.slice(0,40),
     image: safeUrl(fetched.image||'') , site: (fetched.site || host(url) || '').slice(0,80)
   };
+  if (picData || editing?.pic) data.pic = picData;
   data.price = data.cost == null ? '' : data.cost === 0 ? 'Free' : `$${data.cost} pp`;
-  if (data.cost == null) delete data.cost;
+  if (data.cost == null) { if (editing) data.cost = null; else delete data.cost; }
   if (!data.title) return;
   const sb = $('#f-save'), label = sb.textContent;
   sb.disabled = true; sb.textContent = 'Saving…';

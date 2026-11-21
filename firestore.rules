@@ -16,7 +16,10 @@ service cloud.firestore {
       return d.title is string && d.title.size() > 0 && d.title.size() <= 140
         && d.day is string && d.author is string && d.author.size() <= 40
         && d.note is string && d.note.size() <= 400
-        && d.price is string && d.price.size() <= 40;
+        && d.price is string && d.price.size() <= 40
+        // optional own picture, stored as a small compressed image
+        && (!('pic' in d) || (d.pic is string && d.pic.size() < 100000
+            && (d.pic == '' || d.pic.matches('data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+'))));
     }
     function onlyChanged(k) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly([k]); }
     function stepOf(k) { return request.resource.data.get(k, 0) - resource.data.get(k, 0); }
@@ -48,15 +51,22 @@ service cloud.firestore {
     match /items/{id} {
       allow read: if isMember();
       allow create: if isMember() && okItem(request.resource.data)
+        && request.resource.data.get('uid', request.auth.uid) == request.auth.uid
         && request.resource.data.status == 'suggested'
         && request.resource.data.likes == 0
         && request.resource.data.get('comments', 0) == 0;
       // members may only set their own thumbs up/down or bump the comment counter by 1; admins can change anything
       allow update: if isAdmin()
         || (isMember() && onlyChanged('votes') && okVote())
+        // the person who suggested it can change its details (not its status or votes)
+        || (isMember() && resource.data.get('uid', '') == request.auth.uid
+            && request.resource.data.uid == request.auth.uid && okItem(request.resource.data)
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['day', 'url', 'title', 'time', 'end', 'cat', 'cost', 'note', 'author', 'image', 'site', 'price', 'pic']))
         || (isMember() && onlyChanged('likes') && stepOf('likes') in [-1, 1])
         || (isMember() && onlyChanged('comments') && stepOf('comments') in [-1, 1]);
-      allow delete: if isAdmin();
+      allow delete: if isAdmin()
+        || (isMember() && resource.data.get('uid', '') == request.auth.uid && resource.data.status == 'suggested');
 
       match /comments/{cid} {
         allow read: if isMember();
